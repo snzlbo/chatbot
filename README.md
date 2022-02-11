@@ -1,2 +1,2 @@
-# employementAnalysis
+# Employement analysis system
 Ажлын байр олгогчдын өгөгдлийн анализ систем дээр суурилсан чат бот
