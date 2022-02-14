@@ -1,0 +1,20 @@
+# Fdb version 3
+["pdflatex"] 1644814926 "/Users/fate/Desktop/Bachelor/employementAnalysis/main.tex" "/Users/fate/Desktop/Bachelor/employementAnalysis/main.pdf" "main" 1644814927
+  "/Users/fate/Desktop/Bachelor/employementAnalysis/main.aux" 1644814927 32 3985256e7290058c681f74d7a3565a19 ""
+  "/Users/fate/Desktop/Bachelor/employementAnalysis/main.tex" 1644814867 64 d3b3d632e0ec63669673be423c5a7c70 ""
+  "/usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/local/texlive/2021/texmf-dist/tex/latex/base/article.cls" 1601675358 20145 aad8c3dd3bc36e260347b84002182bc2 ""
+  "/usr/local/texlive/2021/texmf-dist/tex/latex/base/size10.clo" 1601675358 8449 a72d5d4e612221b46000c3d71724e0ef ""
+  "/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1616101731 27164 3d5f7887a89df4eb2f6e86ba26ef3254 ""
+  "/usr/local/texlive/2021/texmf-dist/web2c/texmf.cnf" 1616443989 39972 3d6bb4d9d719e93193fa020b58adf5d4 ""
+  "/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1616695603 5169178 a2ce6e2d73f603b690db6777d06dbccb ""
+  "/usr/local/texlive/2021/texmf-var/web2c/pdftex/pdflatex.fmt" 1644814106 2724741 806f8e4ad9ca6907f5fcbd75d6542fde ""
+  "/usr/local/texlive/2021/texmf.cnf" 1616695596 577 4c1911a7228e554c6032256d3cf5567d ""
+  "main.aux" 1644814927 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.tex" 1644814867 64 d3b3d632e0ec63669673be423c5a7c70 ""
+  (generated)
+  "/Users/fate/Desktop/Bachelor/employementAnalysis/main.log"
+  "main.log"
+  "/Users/fate/Desktop/Bachelor/employementAnalysis/main.pdf"
+  "main.aux"
+  "main.pdf"
