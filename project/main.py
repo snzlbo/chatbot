@@ -1,5 +1,4 @@
-from misc.regex import UseRegex as useRegex
-from misc.classTypes import Category, Advertisement
+from misc.classTypes import Category
 from misc.scrape import UseBeautifulSoup as useScrape
 from misc.adScrape import advertisementScrape as useAdScrape
 from misc.pagination import createLinkList as createLinkList
@@ -18,7 +17,7 @@ navigatorList = soup.find_all('div', class_='filter')
 categoryList = navigatorList[2].find_all('div')
 
 for categoryItem in categoryList:
-    # all category link
+    # all parent category link
     categories = categoryItem.find('a')
     url = 'https://www.zangia.mn/' + categories['href']
     tempCategory = Category(url, categories.text)
@@ -39,7 +38,10 @@ for categoryItem in categorySet:
     soup = useScrape(categoryItem.url)
     hasPagination = soup.find('div', class_='page-link')
     if hasPagination != None:
-        advertisementList = createLinkList(hasPagination)
+        pagesLink = createLinkList(hasPagination)
+        for pageLink in pagesLink:
+            soup = useScrape(pageLink)
+            advertisementList = soup.find_all('div', class_='ad')
         print(advertisementList)
         break
     advertisementList = soup.find_all('div', class_='ad')
