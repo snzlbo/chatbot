@@ -14,13 +14,13 @@ url = 'https://www.zangia.mn'
 # scrape initial links
 soup = useScrape(url)
 navigatorList = soup.find_all('div', class_='filter')
-categoryList = navigatorList[2].find_all('div')
+categoryList = navigatorList[1].find_all('div')
 
 for categoryItem in categoryList:
     # all parent category link
     categories = categoryItem.find('a')
     url = 'https://www.zangia.mn/' + categories['href']
-    tempCategory = Category(url, categories.text)
+    tempCategory = Category(url, categories.string)
     categorySet.add(tempCategory)
 
     # all subcategory link
@@ -30,35 +30,29 @@ for categoryItem in categoryList:
     for subCategoryItem in subCategoryList:
         url = 'https://www.zangia.mn/' + subCategoryItem['href']
         tempSubCategory = Category(
-            url, subCategoryItem.text, tempCategory.name)
+            url, subCategoryItem.string, tempCategory.name)
         categorySet.add(tempSubCategory)
 
 for categoryItem in categorySet:
     # print('category:', categoryItem.parentId, 'subCategory:', categoryItem.name, 'url:', categoryItem.url)
+    if categoryItem.parentId == None:
+        continue
     soup = useScrape(categoryItem.url)
     hasPagination = soup.find('div', class_='page-link')
+    pagesUrl = []
     if hasPagination != None:
-        pagesLink = createLinkList(hasPagination)
-        for pageLink in pagesLink:
-            soup = useScrape(pageLink)
-            advertisementList = soup.find_all('div', class_='ad')
-        print(advertisementList)
-        break
-    advertisementList = soup.find_all('div', class_='ad')
-    print(advertisementList)
-    # for ads in advertisementList:
-    #   singleAdsItem = ads.find('a')
-    #   url = 'https://www.zangia.mn/' + singleAdsItem['href']
-
-    #   # ##extracting advertisement infos
-    #   # tempAdItem = useAdScrape(url)
-    #   # tempAdItem.setCategory(categoryItem)
-    #   # adsSet.add(tempAdItem)
-
-    #   soup = useScrape(url)
-    #   ads = Advertisement(url, soup.find('h3').text.strip(), categoryItem)
-    #   sectionList = soup.find_all('div', class_='section')
-    #   for sectionItem in sectionList:
-    #     subTitle = sectionItem.find('div', class_='details')
-    #     print(subTitle)
-    # break
+        pagesUrl = createLinkList(hasPagination, categoryItem.url)
+    else:
+        pagesUrl.append(categoryItem.url)
+    print(pagesUrl)
+    for adUrl in pagesUrl:
+        print(adUrl)
+        soup = useScrape(adUrl)
+        ads = soup.find_all('div', class_='ad')
+        for ad in ads:
+            tempAdItem = useAdScrape(
+                'https://www.zangia.mn/' + ad.find('a', class_=None)['href'])
+            adsSet.add(tempAdItem.setCategory(categoryItem))
+            print(tempAdItem.title)
+    pagesUrl.clear()
+    break
