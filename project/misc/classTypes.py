@@ -35,10 +35,9 @@ class Advertisement:
     salary = ''
     contactInfo = ContactInfo
 
-    def __init__(self, url, title, category=None) -> None:
+    def __init__(self, url, title) -> None:
         self.url = url
         self.title = title
-        self.category = category
 
     def setCategory(self, category) -> None:
         self.category = category

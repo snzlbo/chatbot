@@ -14,7 +14,7 @@ url = 'https://www.zangia.mn'
 # scrape initial links
 soup = useScrape(url)
 navigatorList = soup.find_all('div', class_='filter')
-categoryList = navigatorList[1].find_all('div')
+categoryList = navigatorList[2].find_all('div')
 
 for categoryItem in categoryList:
     # all parent category link
@@ -53,6 +53,5 @@ for categoryItem in categorySet:
             tempAdItem = useAdScrape(
                 'https://www.zangia.mn/' + ad.find('a', class_=None)['href'])
             adsSet.add(tempAdItem.setCategory(categoryItem))
-            print(tempAdItem.title)
     pagesUrl.clear()
     break
