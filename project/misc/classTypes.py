@@ -27,8 +27,9 @@ class Advertisement:
     url = ''
     title = ''
     category = Category
-    roles = ''
-    requirements = ''
+    roles = []
+    requirements = []
+    additionalInfo = []
     location = ''
     level = ''
     type = ''
