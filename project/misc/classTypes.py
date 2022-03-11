@@ -17,10 +17,23 @@ class ContactInfo:
     phoneNumber = ''
     fax = ''
 
-    def __init__(self, address, phoneNumber, fax=None) -> None:
+    def __init__(self, address=None, phoneNumber=None, fax=None) -> None:
         self.address = address
         self.phoneNumber = phoneNumber
         self.fax = fax
+
+
+class OtherInfo:
+    location = ''
+    level = ''
+    type = ''
+    salary = ''
+
+    def __init(self, location=None, level=None, type=None, salary=None) -> None:
+        self.location = location
+        self.level = level
+        self.type = type
+        self.salary = salary
 
 
 class Advertisement:
@@ -30,10 +43,7 @@ class Advertisement:
     roles = []
     requirements = []
     additionalInfo = []
-    location = ''
-    level = ''
-    type = ''
-    salary = ''
+    otherInfo = OtherInfo
     contactInfo = ContactInfo
 
     def __init__(self, url, title) -> None:
