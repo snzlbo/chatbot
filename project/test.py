@@ -1,10 +1,11 @@
 from misc.adScrape import advertisementScrape as useAdScrape
 
 # https://www.zangia.mn/job/_1dxjbkbf9p
-tempAdItem = useAdScrape('https://www.zangia.mn/job/_wlc4g9wi5q')
+# strong exception https://www.zangia.mn/job/_2ysd8y3e1h
+tempAdItem = useAdScrape('https://www.zangia.mn/job/_v-q_reu4o7')
 
 # [['a'], ['c'], 'a']
-  
+
 # print('a', div, 'b')
 # print(div.__dict__)
 # print([k.text for k in div.find_all('strong')])

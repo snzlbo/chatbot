@@ -1,3 +1,4 @@
+import csv
 from misc.classTypes import Category
 from misc.scrape import UseBeautifulSoup as useScrape
 from misc.adScrape import advertisementScrape as useAdScrape
@@ -7,7 +8,7 @@ from misc.pagination import createLinkList as createLinkList
 categorySet = set()
 # all advertisement's link set
 adUrlSet = set()
-# all ads set
+# all ads object set
 adsSet = set()
 url = 'https://www.zangia.mn'
 
@@ -34,7 +35,8 @@ for categoryItem in categoryList:
         categorySet.add(tempSubCategory)
 
 for categoryItem in categorySet:
-    # print('category:', categoryItem.parentId, 'subCategory:', categoryItem.name, 'url:', categoryItem.url)
+    # print('category:', categoryItem.parentId, 'subCategory:',
+    #       categoryItem.name, 'url:', categoryItem.url)
     if categoryItem.parentId == None:
         continue
     soup = useScrape(categoryItem.url)
@@ -52,6 +54,24 @@ for categoryItem in categorySet:
         for ad in ads:
             tempAdItem = useAdScrape(
                 'https://www.zangia.mn/' + ad.find('a', class_=None)['href'])
-            adsSet.add(tempAdItem.setCategory(categoryItem))
+            tempAdItem.setCategory(categoryItem)
+            adsSet.add(tempAdItem)
     pagesUrl.clear()
     break
+
+# scraped infos file
+file = open('text.tsv', 'w', encoding='utf-8')
+# rowHeader = ['Parent Category Name', 'Category Name', 'Category Link',
+#              'Title', 'Roles', 'Requirements', 'Additional Info']
+file.write('Parent Category Name' + '\t' + 'Category Name ' + '\t' +
+           'Category Link' + '\t' + 'Title' + '\t' + 'Roles' + '\t' + 'Requirements' + '\t' + 'Additional Info' + '\n')
+
+for ad in adsSet:
+    file.write(ad.category.parentId + '\t' +
+               ad.category.name + '\t' +
+               ad.url + '\t' +
+               ad.title + '\t' +
+               '\t'.join(ad.roles) + '\n')
+    #    ad.requirements + '\t' +
+    #    ad.additionalInfo + '\n')
+file.close()

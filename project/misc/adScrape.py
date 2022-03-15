@@ -9,28 +9,33 @@ def freeTextScrapper(sections, key) -> list:
         if key != subTitle:
             continue
         div = section.find('div', class_=None)
-        ul = div.find_all('li', class_=None)
-        p = div.find_all('p', class_=None)
+        # ol = div.find_all('li')
+        # ul = div.find_all('li')
+        # p = div.find_all('p')
 
-        # simple list or paragraph scrape
-        if ul != []:
-            for li in ul:
-                content.append(li.text.replace('\xa0', ''))
-            return([s for s in filter(listFunc, content)])
+        # # simple list or paragraph scrape
+        # if ol == []:
+        #     pass
+        # if ol != []:
+        #     for li in ol:
+        #         content.append(li.text.replace('\xa0', ''))
+        #     return([s for s in filter(listFunc, content)])
+        # if ul != []:
+        #     for li in ul:
+        #         content.append(li.text.replace('\xa0', ''))
+        #     return([s for s in filter(listFunc, content)])
 
-        if p != []:
-            for pr in p:
-                content.append(pr.text.replace('\xa0', ''))
-            return([s for s in filter(listFunc, content)])
+        # if p != []:
+        #     for pr in p:
+        #         content.append(pr.text.replace('\xa0', ''))
+        #     return([s for s in filter(listFunc, content)])
 
         # other free text scrapping
         children = div.next_element
-        print(children)
-
         while(children != None):
-            print(children.name)
-            if children.name == None:
+            if children.name == None and children.previous_sibling != None:
                 print(children.name)
+                print(children)
                 i = content.index(children.previous_sibling.text)
                 children.previous_sibling.append(' ')
                 children.previous_sibling.append(children.text.strip())
@@ -39,7 +44,6 @@ def freeTextScrapper(sections, key) -> list:
                     children.previous_sibling.text.replace('\xa0', ''))
                 children = children.next_sibling
                 continue
-
             content.append(children.text.replace('\xa0', ''))
             children = children.next_sibling
 
