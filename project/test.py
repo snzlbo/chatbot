@@ -2,7 +2,7 @@ from misc.adScrape import advertisementScrape as useAdScrape
 
 # https://www.zangia.mn/job/_1dxjbkbf9p
 # strong exception https://www.zangia.mn/job/_2ysd8y3e1h
-tempAdItem = useAdScrape('https://www.zangia.mn/job/_v-q_reu4o7')
+tempAdItem = useAdScrape('https://www.zangia.mn/job/_ju+3ifyu07')
 
 # [['a'], ['c'], 'a']
 

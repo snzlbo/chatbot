@@ -43,6 +43,10 @@ class Advertisement:
     roles = []
     requirements = []
     additionalInfo = []
+    location = ''
+    level = ''
+    type = ''
+    salary = ''
     otherInfo = OtherInfo
     contactInfo = ContactInfo
 

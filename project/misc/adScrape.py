@@ -2,56 +2,45 @@ from .classTypes import Advertisement, Category, OtherInfo
 from .scrape import UseBeautifulSoup as useScrape
 
 
-def freeTextScrapper(sections, key) -> list:
+def freeTextScrapper(sections, key, item=None) -> list:
     for section in sections:
         content = []
         subTitle = section.find('h2', class_=None).text
         if key != subTitle:
             continue
         div = section.find('div', class_=None)
-        # ol = div.find_all('li')
-        # ul = div.find_all('li')
-        # p = div.find_all('p')
-
-        # # simple list or paragraph scrape
-        # if ol == []:
-        #     pass
-        # if ol != []:
-        #     for li in ol:
-        #         content.append(li.text.replace('\xa0', ''))
-        #     return([s for s in filter(listFunc, content)])
-        # if ul != []:
-        #     for li in ul:
-        #         content.append(li.text.replace('\xa0', ''))
-        #     return([s for s in filter(listFunc, content)])
-
-        # if p != []:
-        #     for pr in p:
-        #         content.append(pr.text.replace('\xa0', ''))
-        #     return([s for s in filter(listFunc, content)])
-
-        # other free text scrapping
         children = div.next_element
+
         while(children != None):
-            if children.name == None and children.previous_sibling != None:
-                print(children.name)
-                print(children)
-                i = content.index(children.previous_sibling.text)
-                children.previous_sibling.append(' ')
-                children.previous_sibling.append(children.text.strip())
-                content.pop(i)
-                content.append(
-                    children.previous_sibling.text.replace('\xa0', ''))
-                children = children.next_sibling
-                continue
+            try:
+                if not hasNotAttribute(children.name):
+                    content.append(children.text.strip())
+                if children.name == None and children.previous_sibling != None:
+                    i = content.index(children.previous_sibling.text)
+                    children.previous_sibling.append(' ')
+                    children.previous_sibling.append(children.text.strip())
+                    content.pop(i)
+                    content.append(
+                        children.previous_sibling.text.replace('\xa0', ''))
+                    children = children.next_sibling
+                    continue
+            except:
+                print('An exception occurred')
             content.append(children.text.replace('\xa0', ''))
             children = children.next_sibling
 
         return([s for s in filter(listFunc, content)])
 
 
+def hasNotAttribute(name):
+    if name == 'p' or name == 'ul' or name == 'ol':
+        return False
+    return True
+
+
 def listFunc(e):
     return len(e) != 0
+    return
 
 
 def essentialScrapper(sections) -> OtherInfo:

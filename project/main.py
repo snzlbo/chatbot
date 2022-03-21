@@ -67,11 +67,16 @@ file.write('Parent Category Name' + '\t' + 'Category Name ' + '\t' +
            'Category Link' + '\t' + 'Title' + '\t' + 'Roles' + '\t' + 'Requirements' + '\t' + 'Additional Info' + '\n')
 
 for ad in adsSet:
-    file.write(ad.category.parentId + '\t' +
-               ad.category.name + '\t' +
-               ad.url + '\t' +
-               ad.title + '\t' +
-               '\t'.join(ad.roles) + '\n')
+    print(ad.__dict__, '\n')
+    for attr, ads in ad.__dict__.items():
+        print(type(ads))
+        print(attr, ads)
+    # if ad != []:
+    #     file.write(ad.category.parentId + '\t' +
+    #             ad.category.name + '\t' +
+    #             ad.url + '\t' +
+    #             ad.title + '\t' +
+    #             '\t'.join(ad.roles) + '\n')
     #    ad.requirements + '\t' +
     #    ad.additionalInfo + '\n')
 file.close()
