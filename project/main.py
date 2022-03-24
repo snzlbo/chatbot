@@ -1,11 +1,13 @@
 import csv
-from ntpath import join
 import re
+from datetime import date
+from ntpath import join
 from misc.classTypes import Category
 from misc.scrape import UseBeautifulSoup as useScrape
 from misc.adScrape import advertisementScrape as useAdScrape
 from misc.pagination import createLinkList as createLinkList
 
+today = str(date.today())
 # all categories set
 categorySet = set()
 # all advertisement's link set
@@ -58,9 +60,10 @@ for categoryItem in categorySet:
             tempAdItem.setCategory(categoryItem)
             adsSet.add(tempAdItem)
     pagesUrl.clear()
+    break
 
 # scraped infos file
-file = open('text.csv', 'w', encoding='utf-8')
+file = open(today+'adScrape.csv', 'w', encoding='utf-8')
 # rowHeader = ['Parent Category Name', 'Category Name', 'Category Link',
 #              'Title', 'Roles', 'Requirements', 'Additional Info']
 file.write('Parent Category Name' + '\t' +
