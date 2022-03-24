@@ -1,4 +1,6 @@
 import csv
+from ntpath import join
+import re
 from misc.classTypes import Category
 from misc.scrape import UseBeautifulSoup as useScrape
 from misc.adScrape import advertisementScrape as useAdScrape
@@ -21,8 +23,7 @@ for categoryItem in categoryList:
     # all parent category link
     categories = categoryItem.find('a')
     url = 'https://www.zangia.mn/' + categories['href']
-    tempCategory = Category(url, categories.string)
-    categorySet.add(tempCategory)
+    tempCategory = Category(url, categories.text, '')
 
     # all subcategory link
     soup = useScrape(url)
@@ -31,7 +32,7 @@ for categoryItem in categoryList:
     for subCategoryItem in subCategoryList:
         url = 'https://www.zangia.mn/' + subCategoryItem['href']
         tempSubCategory = Category(
-            url, subCategoryItem.string, tempCategory.name)
+            url, subCategoryItem.text, tempCategory.name)
         categorySet.add(tempSubCategory)
 
 for categoryItem in categorySet:
@@ -57,26 +58,50 @@ for categoryItem in categorySet:
             tempAdItem.setCategory(categoryItem)
             adsSet.add(tempAdItem)
     pagesUrl.clear()
-    break
 
 # scraped infos file
-file = open('text.tsv', 'w', encoding='utf-8')
+file = open('text.csv', 'w', encoding='utf-8')
 # rowHeader = ['Parent Category Name', 'Category Name', 'Category Link',
 #              'Title', 'Roles', 'Requirements', 'Additional Info']
-file.write('Parent Category Name' + '\t' + 'Category Name ' + '\t' +
-           'Category Link' + '\t' + 'Title' + '\t' + 'Roles' + '\t' + 'Requirements' + '\t' + 'Additional Info' + '\n')
+file.write('Parent Category Name' + '\t' +
+           'Category Name ' + '\t' +
+           'Link' + '\t' +
+           'Employee Company' + '\t' +
+           'Title' + '\t' +
+           'Roles' + '\t' +
+           'Requirements' + '\t' +
+           'Additional Info' + '\t' +
+           'Location' + '\t' +
+           'Level' + '\t' +
+           'Type' + '\t' +
+           'Salary' + '\t' +
+           'Address' + '\t' +
+           'Phone' + '\t' +
+           'Fax' + '\t' +
+           'Ad Added Date' + '\n')
+
+print('Total ads: ', len(adsSet), '\n\n')
 
 for ad in adsSet:
-    print(ad.__dict__, '\n')
-    for attr, ads in ad.__dict__.items():
-        print(type(ads))
-        print(attr, ads)
-    # if ad != []:
-    #     file.write(ad.category.parentId + '\t' +
-    #             ad.category.name + '\t' +
-    #             ad.url + '\t' +
-    #             ad.title + '\t' +
-    #             '\t'.join(ad.roles) + '\n')
-    #    ad.requirements + '\t' +
-    #    ad.additionalInfo + '\n')
+    try:
+        file.write(
+            ad.category.parentId+'\t' +
+            ad.category.name+'\t' +
+            ad.url+'\t' +
+            ad.company+'\t' +
+            ad.title+'\t' +
+            ad.roles+'\t' +
+            ad.requirements+'\t' +
+            ad.additionalInfo+'\t' +
+            ad.location+'\t' +
+            ad.level+'\t' +
+            ad.type+'\t' +
+            ad.salary+'\t' +
+            ad.address+'\t' +
+            ad.phoneNumber+'\t' +
+            ad.fax+'\t' +
+            ad.adAddedDate+'\n')
+    except:
+        print('File write error')
+
 file.close()

@@ -3,7 +3,7 @@ class Category:
     name = ''
     parentId = ''
 
-    def __init__(self, url, name, parentId=None) -> None:
+    def __init__(self, url, name, parentId='None') -> None:
         self.url = url
         self.name = name
         self.parentId = parentId
@@ -12,43 +12,25 @@ class Category:
         return self.url
 
 
-class ContactInfo:
+class Advertisement:
+    category = Category
+    url = ''
+    company = ''
+    title = ''
+    # ListInfo
+    roles = ''
+    requirements = ''
+    additionalInfo = ''
+    # OtherInfo
+    location = ''
+    level = ''
+    type = ''
+    salary = ''
+    # ContactInfo
     address = ''
     phoneNumber = ''
     fax = ''
-
-    def __init__(self, address=None, phoneNumber=None, fax=None) -> None:
-        self.address = address
-        self.phoneNumber = phoneNumber
-        self.fax = fax
-
-
-class OtherInfo:
-    location = ''
-    level = ''
-    type = ''
-    salary = ''
-
-    def __init(self, location=None, level=None, type=None, salary=None) -> None:
-        self.location = location
-        self.level = level
-        self.type = type
-        self.salary = salary
-
-
-class Advertisement:
-    url = ''
-    title = ''
-    category = Category
-    roles = []
-    requirements = []
-    additionalInfo = []
-    location = ''
-    level = ''
-    type = ''
-    salary = ''
-    otherInfo = OtherInfo
-    contactInfo = ContactInfo
+    adAddedDate = ''
 
     def __init__(self, url, title) -> None:
         self.url = url
