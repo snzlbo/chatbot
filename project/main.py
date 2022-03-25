@@ -7,40 +7,41 @@ from misc.scrape import UseBeautifulSoup as useScrape
 from misc.adScrape import advertisementScrape as useAdScrape
 from misc.pagination import createLinkList as createLinkList
 
+initialUrl = 'https://www.zangia.mn/'
 today = str(date.today())
 # all categories set
 categorySet = set()
 # all advertisement's link set
-adUrlSet = set()
+adUrlDict = {}
 # all ads object set
 adsSet = set()
-url = 'https://www.zangia.mn'
 
 # scrape initial links
-soup = useScrape(url)
+soup = useScrape(initialUrl)
 navigatorList = soup.find_all('div', class_='filter')
-categoryList = navigatorList[1].find_all('div')
+for navigator in navigatorList:
+    if navigator.find('h3').text.strip() != 'Салбар, мэргэжил':
+        continue
+    # ALL CATEGORY LINKS
+    categoryList = navigator.find_all('div')
 
 for categoryItem in categoryList:
-    # all parent category link
     categories = categoryItem.find('a')
-    url = 'https://www.zangia.mn/' + categories['href']
+    url = initialUrl + categories['href']
     tempCategory = Category(url, categories.text, '')
-
-    # all subcategory link
+    print('CATEGORY LINK SCRAPED! ', url)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
+    # ALL SUBCATEGORY LINKS
     subCategoryList = subCategory.find_all('a')
     for subCategoryItem in subCategoryList:
-        url = 'https://www.zangia.mn/' + subCategoryItem['href']
+        subCategoryUrl = initialUrl + subCategoryItem['href']
         tempSubCategory = Category(
-            url, subCategoryItem.text, tempCategory.name)
+            subCategoryUrl, subCategoryItem.text, tempCategory.name)
         categorySet.add(tempSubCategory)
 
 for categoryItem in categorySet:
-    # print('category:', categoryItem.parentId, 'subCategory:',
-    #       categoryItem.name, 'url:', categoryItem.url)
-    if categoryItem.parentId == None:
+    if categoryItem.parentId == '':
         continue
     soup = useScrape(categoryItem.url)
     hasPagination = soup.find('div', class_='page-link')
@@ -49,23 +50,23 @@ for categoryItem in categorySet:
         pagesUrl = createLinkList(hasPagination, categoryItem.url)
     else:
         pagesUrl.append(categoryItem.url)
-    print(pagesUrl)
-    for adUrl in pagesUrl:
-        print(adUrl)
-        soup = useScrape(adUrl)
+    for pageUrl in pagesUrl:
+        soup = useScrape(pageUrl)
         ads = soup.find_all('div', class_='ad')
+        # CREATE UNIQUE AD DICTIONARY
         for ad in ads:
-            tempAdItem = useAdScrape(
-                'https://www.zangia.mn/' + ad.find('a', class_=None)['href'])
-            tempAdItem.setCategory(categoryItem)
-            adsSet.add(tempAdItem)
+            adUrl = initialUrl+ad.find('a', class_=None)['href']
+            adUrlDict[adUrl] = categoryItem
+    print(pagesUrl)
     pagesUrl.clear()
-    break
 
-# scraped infos file
+print(adUrlDict)
+for adUrl in adUrlDict:
+    tempAdItem = useAdScrape(adUrl)
+    tempAdItem.setCategory(adUrlDict[adUrl])
+    adsSet.add(tempAdItem)
+
 file = open(today+'adScrape.csv', 'w', encoding='utf-8')
-# rowHeader = ['Parent Category Name', 'Category Name', 'Category Link',
-#              'Title', 'Roles', 'Requirements', 'Additional Info']
 file.write('Parent Category Name' + '\t' +
            'Category Name ' + '\t' +
            'Link' + '\t' +
@@ -77,13 +78,12 @@ file.write('Parent Category Name' + '\t' +
            'Location' + '\t' +
            'Level' + '\t' +
            'Type' + '\t' +
-           'Salary' + '\t' +
+           'Min Salary' + '\t' +
+           'Max Salary' + '\t' +
            'Address' + '\t' +
            'Phone' + '\t' +
            'Fax' + '\t' +
            'Ad Added Date' + '\n')
-
-print('Total ads: ', len(adsSet), '\n\n')
 
 for ad in adsSet:
     try:
@@ -99,7 +99,8 @@ for ad in adsSet:
             ad.location+'\t' +
             ad.level+'\t' +
             ad.type+'\t' +
-            ad.salary+'\t' +
+            ad.minSalary+'\t' +
+            ad.maxSalary+'\t' +
             ad.address+'\t' +
             ad.phoneNumber+'\t' +
             ad.fax+'\t' +

@@ -25,7 +25,9 @@ class Advertisement:
     location = ''
     level = ''
     type = ''
-    salary = ''
+    minSalary = ''
+    maxSalary = ''
+    isDealeable = bool
     # ContactInfo
     address = ''
     phoneNumber = ''

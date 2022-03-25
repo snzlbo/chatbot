@@ -15,16 +15,6 @@ def listScraper(sections, key) -> str:
         while(children != None):
             try:
                 content.append(textStrip(children.text))
-                # if children.name == None and children.previous_sibling != None:
-                #     print(children.name)
-                #     i = content.index(children.previous_sibling.text)
-                #     children.previous_sibling.append(' ')
-                #     children.previous_sibling.append(children.text.strip())
-                #     content.pop(i)
-                #     content.append(
-                #         children.previous_sibling.text.replace('\xa0', ''))
-                #     children = children.next_sibling
-                #     continue
                 children = children.next_sibling
                 continue
             except:
@@ -63,8 +53,16 @@ def singleItemScraper(sections, key, subKey) -> str:
     return 'None'
 
 
+def salaryScraper(salary):
+    k = re.split(r'[^\d,]+', salary, 2, re.IGNORECASE)
+    if len(k) < 2:
+        [a] = k[0:1]
+        return a, a
+    [a, b] = k[0:2]
+    return a, b
+
+
 def advertisementScrape(url) -> Advertisement:
-    print(url)
     soup = useScrape(url)
     advertisement = Advertisement(url, soup.find('h3').text.strip())
     companyTitle = soup.find('div', class_='nlp').find('td')
@@ -87,7 +85,10 @@ def advertisementScrape(url) -> Advertisement:
     advertisement.location = singleItemScraper(sections, 'Бусад', 'Байршил')
     advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
     advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
-    advertisement.salary = singleItemScraper(sections, 'Бусад', 'Цалин')
+    minSalar, maxSalary = salaryScraper(
+        singleItemScraper(sections, 'Бусад', 'Цалин'))
+    advertisement.minSalary = minSalar
+    advertisement.maxSalary = maxSalary
     advertisement.address = singleItemScraper(sections, 'Холбоо барих', 'Хаяг')
     advertisement.phoneNumber = singleItemScraper(
         sections, 'Холбоо барих', 'Утас')
@@ -95,18 +96,7 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
-    print('company:', advertisement.company)
-    print('title:', advertisement.title)
-    print('roles:', advertisement.roles)
-    print('requirements:', advertisement.requirements)
-    print('additional Info:', advertisement.additionalInfo)
-    print('location:', advertisement.location)
-    print('salary:', advertisement.salary)
-    print('type:', advertisement.type)
-    print('level:', advertisement.level)
-    print('address:', advertisement.address)
-    print('phone:', advertisement.phoneNumber)
-    print('fax:', advertisement.fax)
-    print('adAddedDate:', advertisement.adAddedDate)
+    print(advertisement.minSalary, advertisement.maxSalary)
+    print('SINGLE AD SCRAPPING DONE!!!', url)
 
     return advertisement
