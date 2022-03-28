@@ -22,19 +22,13 @@ def listScraper(sections, key) -> str:
             children = children.next_sibling
         content = [s for s in filter(listFunc, content)]
     if not content:
-        return 'None'
+        return ''
     return ' '.join(content)
 
 
 def textStrip(text) -> str:
-    pattern = re.compile('[\r\n\xa0 ]+', re.MULTILINE | re.IGNORECASE)
+    pattern = re.compile('[\r\n\xa0\t ]+', re.MULTILINE | re.IGNORECASE)
     return pattern.sub(' ', text.strip())
-
-
-def hasNotAttribute(name):
-    if name == 'p' or name == 'ul' or name == 'ol':
-        return False
-    return True
 
 
 def listFunc(e):
@@ -54,12 +48,15 @@ def singleItemScraper(sections, key, subKey) -> str:
 
 
 def salaryScraper(salary):
+    isDealable = ''
     k = re.split(r'[^\d,]+', salary, 2, re.IGNORECASE)
     if len(k) < 2:
         [a] = k[0:1]
         return a, a
     [a, b] = k[0:2]
-    return a, b
+    if len(k) > 2:
+        isDealable = 'Тохиролцоно'
+    return a, b, isDealable
 
 
 def advertisementScrape(url) -> Advertisement:
@@ -85,10 +82,11 @@ def advertisementScrape(url) -> Advertisement:
     advertisement.location = singleItemScraper(sections, 'Бусад', 'Байршил')
     advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
     advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
-    minSalar, maxSalary = salaryScraper(
+    minSalary, maxSalary, isDealable = salaryScraper(
         singleItemScraper(sections, 'Бусад', 'Цалин'))
-    advertisement.minSalary = minSalar
+    advertisement.minSalary = minSalary
     advertisement.maxSalary = maxSalary
+    advertisement.isDealable = isDealable
     advertisement.address = singleItemScraper(sections, 'Холбоо барих', 'Хаяг')
     advertisement.phoneNumber = singleItemScraper(
         sections, 'Холбоо барих', 'Утас')
@@ -96,7 +94,20 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
-    print(advertisement.minSalary, advertisement.maxSalary)
+    print(advertisement.roles)
+    print(advertisement.requirements)
+    print(advertisement.additionalInfo)
+    print(advertisement.location)
+    print(advertisement.level)
+    print(advertisement.type)
+    print(advertisement.minSalary)
+    print(advertisement.maxSalary)
+    print(advertisement.isDealable)
+    print(advertisement.address)
+    print(advertisement.phoneNumber)
+    print(advertisement.fax)
+    print(advertisement.adAddedDate)
+
     print('SINGLE AD SCRAPPING DONE!!!', url)
 
     return advertisement

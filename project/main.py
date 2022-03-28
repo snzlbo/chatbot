@@ -1,12 +1,11 @@
-import csv
-import re
 from datetime import date
-from ntpath import join
+import time
 from misc.classTypes import Category
 from misc.scrape import UseBeautifulSoup as useScrape
 from misc.adScrape import advertisementScrape as useAdScrape
 from misc.pagination import createLinkList as createLinkList
 
+start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
 today = str(date.today())
 # all categories set
@@ -60,12 +59,6 @@ for categoryItem in categorySet:
     print(pagesUrl)
     pagesUrl.clear()
 
-print(adUrlDict)
-for adUrl in adUrlDict:
-    tempAdItem = useAdScrape(adUrl)
-    tempAdItem.setCategory(adUrlDict[adUrl])
-    adsSet.add(tempAdItem)
-
 file = open(today+'adScrape.csv', 'w', encoding='utf-8')
 file.write('Parent Category Name' + '\t' +
            'Category Name ' + '\t' +
@@ -80,32 +73,37 @@ file.write('Parent Category Name' + '\t' +
            'Type' + '\t' +
            'Min Salary' + '\t' +
            'Max Salary' + '\t' +
+           'Is Dealable' + '\t' +
            'Address' + '\t' +
            'Phone' + '\t' +
            'Fax' + '\t' +
            'Ad Added Date' + '\n')
-
-for ad in adsSet:
+print(adUrlDict)
+for adUrl in adUrlDict:
+    print(adUrl)
     try:
+        tempAdItem = useAdScrape(adUrl)
+        tempAdItem.setCategory(adUrlDict[adUrl])
         file.write(
-            ad.category.parentId+'\t' +
-            ad.category.name+'\t' +
-            ad.url+'\t' +
-            ad.company+'\t' +
-            ad.title+'\t' +
-            ad.roles+'\t' +
-            ad.requirements+'\t' +
-            ad.additionalInfo+'\t' +
-            ad.location+'\t' +
-            ad.level+'\t' +
-            ad.type+'\t' +
-            ad.minSalary+'\t' +
-            ad.maxSalary+'\t' +
-            ad.address+'\t' +
-            ad.phoneNumber+'\t' +
-            ad.fax+'\t' +
-            ad.adAddedDate+'\n')
+            tempAdItem.category.parentId+'\t' +
+            tempAdItem.category.name+'\t' +
+            tempAdItem.url+'\t' +
+            tempAdItem.company+'\t' +
+            tempAdItem.title+'\t' +
+            tempAdItem.roles+'\t' +
+            tempAdItem.requirements+'\t' +
+            tempAdItem.additionalInfo+'\t' +
+            tempAdItem.location+'\t' +
+            tempAdItem.level+'\t' +
+            tempAdItem.type+'\t' +
+            tempAdItem.minSalary+'\t' +
+            tempAdItem.maxSalary+'\t' +
+            tempAdItem.isDealable+'\t' +
+            tempAdItem.address+'\t' +
+            tempAdItem.phoneNumber+'\t' +
+            tempAdItem.fax+'\t' +
+            tempAdItem.adAddedDate+'\n')
     except:
-        print('File write error')
-
+        print('Ad writing error')
 file.close()
+print("--- %s seconds ---" % (time.time() - start_time))

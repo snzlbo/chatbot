@@ -27,7 +27,7 @@ class Advertisement:
     type = ''
     minSalary = ''
     maxSalary = ''
-    isDealeable = bool
+    isDealable = ''
     # ContactInfo
     address = ''
     phoneNumber = ''
