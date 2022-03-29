@@ -1,8 +1,8 @@
 import time
-from misc.classTypes import Category
-from misc.scrape import UseBeautifulSoup as useScrape
-from misc.adScrape import advertisementScrape as useAdScrape
-from misc.pagination import createLinkList as createLinkList
+from assets.classTypes import Category
+from assets.scrape import UseBeautifulSoup as useScrape
+from assets.adScrape import advertisementScrape as useAdScrape
+from assets.pagination import createLinkList as createLinkList
 
 start_time = time.time()
 url = 'https://www.zangia.mn/job/_fwpwba+kld'
