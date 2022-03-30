@@ -21,5 +21,6 @@ for index, row in df.iterrows():
     if it > 5:
         break
     if row['Max Salary'] > '1500000':
+        print('***********************************************')
         print(row)
     it = it + 1

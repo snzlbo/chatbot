@@ -103,6 +103,7 @@ for adUrl in adUrlDict:
             tempAdItem.phoneNumber+'\t' +
             tempAdItem.fax+'\t' +
             tempAdItem.adAddedDate+'\n')
+        del tempAdItem
     except:
         print('Ad writing error')
 file.close()
