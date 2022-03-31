@@ -59,6 +59,17 @@ def salaryScraper(salary):
     return a, b, isDealable
 
 
+def locationScrapper(location):
+    city = ''
+    district = ''
+    k = location.split(',')
+    if len(k) < 2:
+        city = k[0]
+        return city, district
+    [city, district] = k[0:2]
+    return city, district
+
+
 def advertisementScrape(url) -> Advertisement:
     soup = useScrape(url)
     advertisement = Advertisement(url, soup.find('h3').text.strip())
@@ -79,14 +90,17 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Ажлын байранд тавигдах шаардлага')
     advertisement.additionalInfo = listScraper(
         sections, 'Нэмэлт мэдээлэл')
-    advertisement.location = singleItemScraper(sections, 'Бусад', 'Байршил')
     advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
     advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
     minSalary, maxSalary, isDealable = salaryScraper(
         singleItemScraper(sections, 'Бусад', 'Цалин'))
+    city, district = locationScrapper(
+        singleItemScraper(sections, 'Бусад', 'Байршил'))
     advertisement.minSalary = minSalary
     advertisement.maxSalary = maxSalary
     advertisement.isDealable = isDealable
+    advertisement.city = city
+    advertisement.district = district
     advertisement.address = singleItemScraper(sections, 'Холбоо барих', 'Хаяг')
     advertisement.phoneNumber = singleItemScraper(
         sections, 'Холбоо барих', 'Утас')
@@ -94,7 +108,6 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
-
     print('SINGLE AD SCRAPPING DONE!!!', url)
 
     return advertisement

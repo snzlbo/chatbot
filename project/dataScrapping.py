@@ -68,7 +68,8 @@ file.write('Parent Category Name' + '\t' +
            'Roles' + '\t' +
            'Requirements' + '\t' +
            'Additional Info' + '\t' +
-           'Location' + '\t' +
+           'City/Province' + '\t' +
+           'District' + '\t'
            'Level' + '\t' +
            'Type' + '\t' +
            'Min Salary' + '\t' +
@@ -93,7 +94,8 @@ for adUrl in adUrlDict:
             tempAdItem.roles+'\t' +
             tempAdItem.requirements+'\t' +
             tempAdItem.additionalInfo+'\t' +
-            tempAdItem.location+'\t' +
+            tempAdItem.city+'\t' +
+            tempAdItem.district+'\t' +
             tempAdItem.level+'\t' +
             tempAdItem.type+'\t' +
             tempAdItem.minSalary+'\t' +

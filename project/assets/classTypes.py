@@ -22,7 +22,8 @@ class Advertisement:
     requirements = ''
     additionalInfo = ''
     # OtherInfo
-    location = ''
+    city = ''
+    district = ''
     level = ''
     type = ''
     minSalary = ''
