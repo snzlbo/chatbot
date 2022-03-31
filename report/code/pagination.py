@@ -1,5 +1,5 @@
 from array import array
-from .regex import a as useRegex
+from .regex import UseRegex as useRegex
 from .scrape import UseBeautifulSoup as useScrape
 
 
