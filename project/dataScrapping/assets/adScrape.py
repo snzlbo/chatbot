@@ -108,6 +108,7 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
+    print(advertisement.additionalInfo)
     print('SINGLE AD SCRAPPING DONE!!!', url)
 
     return advertisement

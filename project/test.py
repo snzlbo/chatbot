@@ -1,8 +1,8 @@
 import time
-from assets.classTypes import Category
-from assets.scrape import UseBeautifulSoup as useScrape
-from assets.adScrape import advertisementScrape as useAdScrape
-from assets.pagination import createLinkList as createLinkList
+from dataScrapping.assets.classTypes import Category
+from dataScrapping.assets.scrape import UseBeautifulSoup as useScrape
+from dataScrapping.assets.adScrape import advertisementScrape as useAdScrape
+from dataScrapping.assets.pagination import createLinkList as createLinkList
 
 start_time = time.time()
 url = 'https://www.zangia.mn/job/list/b.15'
@@ -10,34 +10,56 @@ soup = useScrape(url)
 categorySet = set()
 adUrlDict = {}
 
-subCategory = soup.find('div', class_='pros')
-subCategoryList = subCategory.find_all('a')
-for subCategoryItem in subCategoryList:
-    subCategoryUrl = 'https://www.zangia.mn/' + subCategoryItem['href']
-    tempSubCategory = Category(
-        subCategoryUrl, subCategoryItem.text, 'Уул уурхай')
-    categorySet.add(tempSubCategory)
+## parent category scrape
+# subCategory = soup.find('div', class_='pros')
+# subCategoryList = subCategory.find_all('a')
+# for subCategoryItem in subCategoryList:
+#     subCategoryUrl = 'https://www.zangia.mn/' + subCategoryItem['href']
+#     tempSubCategory = Category(
+#         subCategoryUrl, subCategoryItem.text, 'Уул уурхай')
+#     categorySet.add(tempSubCategory)
 
-for categoryItem in categorySet:
-    if(categoryItem.parentId == ''):
-        continue
-    soup = useScrape(categoryItem.url)
-    hasPagination = soup.find('div', class_='page-link')
-    pagesUrl = []
-    if hasPagination != None:
-        pagesUrl = createLinkList(hasPagination, categoryItem.url)
-    else:
-        pagesUrl.append(categoryItem.url)
-    for pageUrl in pagesUrl:
-        soup = useScrape(pageUrl)
-        ads = soup.find_all('div', class_='ad')
-        # CREATE UNIQUE AD DICTIONARY
-        for ad in ads:
-            adUrl = 'https://www.zangia.mn/'+ad.find('a', class_=None)['href']
-            adUrlDict[adUrl] = categoryItem
-    print(pagesUrl)
-    pagesUrl.clear()
+# for categoryItem in categorySet:
+#     if(categoryItem.parentId == ''):
+#         continue
+#     soup = useScrape('https://www.zangia.mn/job/list/b.22/r.532')
+#     hasPagination = soup.find('div', class_='page-link')
+#     pagesUrl = []
+#     if hasPagination != None:
+#         pagesUrl = createLinkList(hasPagination, categoryItem.url)
+#     else:
+#         pagesUrl.append(categoryItem.url)
+#     for pageUrl in pagesUrl:
+#         soup = useScrape(pageUrl)
+#         ads = soup.find_all('div', class_='ad')
+#         # CREATE UNIQUE AD DICTIONARY
+#         for ad in ads:
+#             adUrl = 'https://www.zangia.mn/'+ad.find('a', class_=None)['href']
+#             adUrlDict[adUrl] = categoryItem
+#     print(pagesUrl)
+#     pagesUrl.clear()
 
+
+## subcategoryScrape
+cate = Category('https://www.zangia.mn/job/list/b.22/',
+                'Сантехник', 'Барилга, Үл хөдлөх хөрөнгө')
+soup = useScrape('https://www.zangia.mn/job/list/b.22/r.532')
+hasPagination = soup.find('div', class_='page-link')
+pagesUrl = []
+if hasPagination != None:
+    pagesUrl = createLinkList(
+        hasPagination, 'https://www.zangia.mn/job/list/b.22/r.532')
+else:
+    pagesUrl.append('https://www.zangia.mn/job/list/b.22/r.532')
+for pageUrl in pagesUrl:
+    soup = useScrape(pageUrl)
+    ads = soup.find_all('div', class_='ad')
+    # CREATE UNIQUE AD DICTIONARY
+    for ad in ads:
+        adUrl = 'https://www.zangia.mn/'+ad.find('a', class_=None)['href']
+        adUrlDict[adUrl] = cate
+print(pagesUrl)
+pagesUrl.clear()
 
 file = open('test.csv', 'w', encoding='utf-8')
 file.write('Parent Category Name' + '\t' +
