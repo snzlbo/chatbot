@@ -85,17 +85,17 @@ def advertisementScrape(url) -> Advertisement:
     # all items
     sections = soup.find_all('div', class_='section')
     advertisement.roles = listScraper(
-        sections, 'Гүйцэтгэх үндсэн үүрэг')
+        sections, 'Guitsetgeh undsen uurerg')
     advertisement.requirements = listScraper(
-        sections, 'Ажлын байранд тавигдах шаардлага')
+        sections, 'Ajliin bairnii shaardlaga')
     advertisement.additionalInfo = listScraper(
-        sections, 'Нэмэлт мэдээлэл')
-    advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
-    advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
+        sections, 'Nemelt medeelel')
+    advertisement.level = singleItemScraper(sections, 'Busad', 'Tuvshin')
+    advertisement.type = singleItemScraper(sections, 'Busad', 'Turul')
     minSalary, maxSalary, isDealable = salaryScraper(
-        singleItemScraper(sections, 'Бусад', 'Цалин'))
+        singleItemScraper(sections, 'Busad', 'Tsalin'))
     city, district = locationScrapper(
-        singleItemScraper(sections, 'Бусад', 'Байршил'))
+        singleItemScraper(sections, 'Busad', 'Bairshil'))
     advertisement.minSalary = minSalary
     advertisement.maxSalary = maxSalary
     advertisement.isDealable = isDealable
@@ -103,11 +103,12 @@ def advertisementScrape(url) -> Advertisement:
     advertisement.district = district
     advertisement.address = singleItemScraper(sections, 'Холбоо барих', 'Хаяг')
     advertisement.phoneNumber = singleItemScraper(
-        sections, 'Холбоо барих', 'Утас')
+        sections, 'Holboo barih', 'Utas')
     advertisement.fax = singleItemScraper(
-        sections, 'Холбоо барих', 'Факс')
+        sections, 'Holboo barih', 'Fax')
     advertisement.adAddedDate = singleItemScraper(
-        sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
+        sections, 'Zariin hugatsaa', 'Zar niitelsen ognoo')
+    print(advertisement.additionalInfo)
     print('SINGLE AD SCRAPPING DONE!!!', url)
 
     return advertisement

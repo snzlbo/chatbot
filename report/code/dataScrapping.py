@@ -19,7 +19,7 @@ adsSet = set()
 soup = useScrape(initialUrl)
 navigatorList = soup.find_all('div', class_='filter')
 for navigator in navigatorList:
-    if navigator.find('h3').text.strip() != 'Салбар, мэргэжил':
+    if navigator.find('h3').text.strip() != 'Salbar, mergejil':
         continue
     # ALL CATEGORY LINKS
     categoryList = navigator.find_all('div')
@@ -28,7 +28,6 @@ for categoryItem in categoryList:
     categories = categoryItem.find('a')
     url = initialUrl + categories['href']
     tempCategory = Category(url, categories.text, '')
-    print('CATEGORY LINK SCRAPED! ', url)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
     # ALL SUBCATEGORY LINKS
@@ -56,7 +55,6 @@ for categoryItem in categorySet:
         for ad in ads:
             adUrl = initialUrl+ad.find('a', class_=None)['href']
             adUrlDict[adUrl] = categoryItem
-    print(pagesUrl)
     pagesUrl.clear()
 
 file = open(today+'adScrape.csv', 'w', encoding='utf-8')
@@ -79,7 +77,7 @@ file.write('Parent Category Name' + '\t' +
            'Phone' + '\t' +
            'Fax' + '\t' +
            'Ad Added Date' + '\n')
-print(adUrlDict)
+
 for adUrl in adUrlDict:
     print(adUrl)
     try:

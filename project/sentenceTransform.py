@@ -4,42 +4,30 @@ import pandas as pd
 import numpy as np
 import matplotlib
 
-with open('/Users/fate/Desktop/Bachelor/employementAnalysis/project/latestData.tsv', 'r', encoding='utf-8') as file:
+with open('/Users/zolboo/Desktop/bachelor/employementAnalysis/project/latestData.tsv', 'r', encoding='utf-8') as file:
     app_lines = file.read().split('\n')
 
 df = pd.read_csv(
-    '/Users/fate/Desktop/Bachelor/employementAnalysis/project/latestData.tsv', sep='\t')
+    '/Users/zolboo/Desktop/bachelor/employementAnalysis/project/latestData.tsv', sep='\t')
 
 print(len(df))
 filtered_df = df[df.Fax != 'None']
 
-# it = 0
-# for index, row in df.iterrows():
-#     if it > 5:
-#         break
-#     if row['Max Salary'] > '1500000':
-#         print('***********************************************')
-#         print(row)
-#     it = it + 1
+# def extractPrice(price):
+#     print(type(price))
+#     ans = float(price.replace(',', ''))
+#     return ans
 
 
-def extractPrice(price):
-    ans = .0
-    if 
-    return ans
+# def normalizeData(data_set):
+#     ret = pd.DataFrame(columns=["Title", "Min Salary", "Max Salary", "isDealable", "City/Provice", "District"])
+#     for index, row in data_set.iterrows():
+#         t_price = extractPrice(row['Min Salary'])
+#     return ret
 
 
-def normalizeData(data_set):
-    ret = pd.DataFrame(columns=["Min Salary", "Max Salary"])
-    for index, row in data_set.iterrows():
-        ret = ret.append({'Min Salary': float(row['Min Salary']),
-                          'Max Salary': float(row['Max Salary'])
-                          }, ignore_index=True)
-    return ret
-
-
-ret = normalizeData(df)
-print(len(ret))
+# ret = normalizeData(df)
+# print(len(ret))
 # print('a: ', ret)
 
 print(type(df['Max Salary'][1]))
