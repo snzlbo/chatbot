@@ -12,15 +12,40 @@ with open('/Users/fate/Desktop/Bachelor/employementAnalysis/project/latestData.t
 df = pd.read_csv(
     '/Users/fate/Desktop/Bachelor/employementAnalysis/project/latestData.tsv', sep='\t')
 
-print(len(df))
-filtered_df = df[df.Fax != 'None']
-print(len(df), len(filtered_df))
 
-it = 0
-for index, row in df.iterrows():
-    if it > 5:
-        break
-    if row['Max Salary'] > '1500000':
-        print('***********************************************')
-        print(row)
-    it = it + 1
+def cleanSalary(salary) -> float:
+    if(isinstance(salary, str)):
+        return float(salary.replace(',', ''))
+    return None
+
+
+def cleanDealable(deal) -> bool:
+    if(deal == 'Тохиролцоно'):
+        return True
+    return False
+
+
+def normalizeDataSet(data_set):
+    ret = pd.DataFrame(columns=['employee', 'jobTitle', 'level', 'minSalary',
+                       'maxSalary', 'isDealable', 'city', 'district'])
+    for index, row in df.iterrows():
+        minSalary = cleanSalary(row['Min Salary'])
+        maxSalary = cleanSalary(row['Max Salary'])
+        if minSalary is None and maxSalary is None:
+            continue
+        dealable = cleanDealable(row['Is Dealable'])
+        ret = ret.append({'branch': row['Category Name'],
+                          'employee': row['Employee Company'],
+                          'jobTitle': row['Title'],
+                          'level': row['Level'],
+                          'minSalary': minSalary,
+                          'maxSalary': maxSalary,
+                          'isDealable': dealable,
+                          'city': row['City/Province'],
+                          'district': row['District']
+                          }, ignore_index=True)
+    return ret
+
+
+data_set = normalizeDataSet(df)
+len(data_set)

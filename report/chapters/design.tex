@@ -1,9 +1,8 @@
 \section{Өгөгдлийн сангийн диаграм}
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
-  \includegraphics*[width = \textwidth]{images/dbDiagram.png}
-  \caption{Өгөгдлийн сангийн диаграм}
-  \label{fig:dbDiagram}
+  \includegraphics[width = \textwidth]{images/dbDiagram.png}
+  \caption{Өгөгдлийн сангийн диаграм}\label{fig:dbDiagram}
 \end{figure}
 \newpage
 
@@ -11,9 +10,8 @@
 Чатбот системийн өгөгдлийн сангийн диаграмд харуулсан хүснэгтүүдэд агуулагдах мэдээлэл болон үүргийн талаар дэлгэрэнгүй тайлбарласан болно. 
 \subsection{advertisement - Ажлын байрны зар}
 Ажлын байрны зар нь ямар категори буюу ангилалд, ямар холбоо барих хаягийн хамтаар хадгалагдаж буй мэдээлэл болон бусад дэлгэрэнгүй мэдээллийг харуулсан байна. 
-\begin{table}[h]
-  \caption{advertisement хүснэгт}
-  \label{table:advertisement}
+\begin{table}[ht]
+  \caption{advertisement хүснэгт}\label{table:advertisement1}
   \begin{tabular}{|l|l|c|c|c|l|}
     \hline
     \multicolumn{1}{|c|}{\textbf{№}} & \multicolumn{1}{c|}{\textbf{Баганын нэр}} & \textbf{\begin{tabular}[c]{@{}c@{}}Түлхүүр \\ өгөгдөл\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Өгөгдлийн \\ төрөл\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Хоосон \\ утга\end{tabular}} & \multicolumn{1}{c|}{\textbf{Тайлбар}}                                                             \\ \hline
@@ -35,8 +33,7 @@
     % 16                               & adAddedDate                               &                                                                     & datetime                                                            & not null                                                        & Зар нийтэлсэн огноо                                                                               \\ \hline
     \end{tabular}
 \end{table}
-\begin{table}[h]
-    \label{table:advertisement}
+\begin{table}[ht]
     \begin{tabular}{|l|l|c|c|c|l|}
       \hline
       \multicolumn{1}{|c|}{\textbf{№}} & \multicolumn{1}{c|}{\textbf{Баганын нэр}} & \textbf{\begin{tabular}[c]{@{}c@{}}Түлхүүр \\ өгөгдөл\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Өгөгдлийн \\ төрөл\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Хоосон \\ утга\end{tabular}} & \multicolumn{1}{c|}{\textbf{Тайлбар}}                                                             \\ \hline
@@ -65,9 +62,8 @@
 
 \subsection{category - Ангилал}
 Ажлын байрны зарын бүх ангиллуудын хаяг болон нэрийн мэдээллийг хадгалах хүснэгт юм. Ангиллууд нь дэд ангилал байж болох учир түүнийг эцэг ангиллын дугаарыг хадгалах байдлаар зохиомжлов. 
-\begin{table}[h]
-  \caption{category хүснэгт}
-  \label{table:category}
+\begin{table}[ht]
+  \caption{category хүснэгт}\label{table:category}
   \begin{tabular}{|l|l|c|l|c|l|}
   \hline
   \multicolumn{1}{|c|}{\textbf{№}} & \multicolumn{1}{c|}{\textbf{Баганын нэр}} & \textbf{\begin{tabular}[c]{@{}c@{}}Түлхүүр\\ өгөгдөл\end{tabular}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Өгөгдлийн\\ төрөл\end{tabular}}} & \textbf{\begin{tabular}[c]{@{}c@{}}Хоосон\\ Утга\end{tabular}} & \multicolumn{1}{c|}{\textbf{Тайлбар}}                                   \\ \hline
@@ -79,9 +75,8 @@
 \end{table}
 \subsection{location - Байршил}
 Ажлын байрны байршил болон хот, аймаг, дүүргийн дэлгэрэнгүй өгөгдлийг хадгална. 
-\begin{table}[h]
-  \caption{location хүснэгт}
-  \label{table:location}
+\begin{table}[ht]
+  \caption{location хүснэгт}\label{table:location1}
   \begin{tabular}{|l|l|c|l|c|l|}
   \hline
   \multicolumn{1}{|c|}{\textbf{№}} & \multicolumn{1}{c|}{\textbf{Баганын нэр}} & \textbf{\begin{tabular}[c]{@{}c@{}}Түлхүүр\\ өгөгдөл\end{tabular}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Өгөгдлийн\\ төрөл\end{tabular}}} & \textbf{\begin{tabular}[c]{@{}c@{}}Хоосон\\ Утга\end{tabular}} & \multicolumn{1}{c|}{\textbf{Тайлбар}}                                                  \\ \hline
@@ -89,8 +84,7 @@
   2                                & city                                      &                                                                    & varchar                                                                                 & null                                                           & \begin{tabular}[c]{@{}l@{}}Ажлын байрны зарын байрших\\ хот, аймгийн нэр\end{tabular}  \\ \hline
   \end{tabular}
 \end{table}
-\begin{table}[h]
-    \label{table:location}
+\begin{table}[ht]
     \begin{tabular}{|l|l|c|l|c|l|}
     \hline
     \multicolumn{1}{|c|}{\textbf{№}} & \multicolumn{1}{c|}{\textbf{Баганын нэр}} & \textbf{\begin{tabular}[c]{@{}c@{}}Түлхүүр\\ өгөгдөл\end{tabular}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Өгөгдлийн\\ төрөл\end{tabular}}} & \textbf{\begin{tabular}[c]{@{}c@{}}Хоосон\\ Утга\end{tabular}} & \multicolumn{1}{c|}{\textbf{Тайлбар}}                                                  \\ \hline
@@ -100,9 +94,8 @@
 \end{table}
 \subsection{contactInfo - Холбоо барих}
 Ажлын байр олгогчийн хаягийн дэлгэрэнгүй өгөгдлийг хадгалана.
-\begin{table}[h]
-  \caption{contactInfo хүснэгт}
-  \label{table:contactInfo}
+\begin{table}[ht]
+  \caption{contactInfo хүснэгт}\label{table:contactInfo}
   \begin{tabular}{|l|l|c|l|c|l|}
   \hline
   \multicolumn{1}{|c|}{\textbf{№}} & \multicolumn{1}{c|}{\textbf{Баганын нэр}} & \textbf{\begin{tabular}[c]{@{}c@{}}Түлхүүр\\ өгөгдөл\end{tabular}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Өгөгдлийн\\ төрөл\end{tabular}}} & \textbf{\begin{tabular}[c]{@{}c@{}}Хоосон\\ Утга\end{tabular}} & \multicolumn{1}{c|}{\textbf{Тайлбар}}                                                \\ \hline

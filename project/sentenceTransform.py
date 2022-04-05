@@ -11,7 +11,6 @@ df = pd.read_csv(
     '/Users/zolboo/Desktop/bachelor/employementAnalysis/project/latestData.tsv', sep='\t')
 
 print(len(df))
-filtered_df = df[df.Fax != 'None']
 
 # def extractPrice(price):
 #     print(type(price))

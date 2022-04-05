@@ -2,7 +2,6 @@ from array import array
 from .regex import a as useRegex
 from .scrape import UseBeautifulSoup as useScrape
 
-
 def createLinkList(pagination, url) -> array:
     linkList = []
     total = int(useRegex(pagination.find_all('a')[-1]['href']))

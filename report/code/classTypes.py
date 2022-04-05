@@ -11,7 +11,6 @@ class Category:
     def getUrl(self) -> str:
         return self.url
 
-
 class Advertisement:
     category = Category
     url = ''
