@@ -1,15 +1,30 @@
 class Category:
     url = ''
     name = ''
-    parentId = ''
 
-    def __init__(self, url, name, parentId='None') -> None:
+    def __init__(self, url, name, parentId=None) -> None:
         self.url = url
         self.name = name
         self.parentId = parentId
 
     def getUrl(self) -> str:
         return self.url
+
+
+class location:
+    city = ''
+    district = ''
+    exactAddress = ''
+
+    def __init__(self, city=None, district=None, exactAddress=None) -> None:
+        self.city = city
+        self.district = district
+        self.exactAddress = exactAddress
+
+
+class contact:
+    phoneNumber = ''
+    fax = ''
 
 
 class Advertisement:

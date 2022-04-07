@@ -51,8 +51,11 @@ def salaryScraper(salary):
     isDealable = ''
     k = re.split(r'[^\d,]+', salary, 2, re.IGNORECASE)
     if len(k) < 2:
-        [a] = k[0:1]
-        return a, a
+        [a] = k[0]
+        return a, a, isDealable
+    if k[1] == '':
+        a = k[0]
+        return a, a, isDealable
     [a, b] = k[0:2]
     if len(k) > 2:
         isDealable = 'Тохиролцоно'
@@ -108,7 +111,6 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
-    print(advertisement.additionalInfo)
     print('SINGLE AD SCRAPPING DONE!!!', url)
 
     return advertisement

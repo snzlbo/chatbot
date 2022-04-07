@@ -27,7 +27,7 @@ for navigator in navigatorList:
 for categoryItem in categoryList:
     categories = categoryItem.find('a')
     url = initialUrl + categories['href']
-    tempCategory = Category(url, categories.text, '')
+    tempCategory = Category(url, categories.text)
     print('CATEGORY LINK SCRAPED! ', url)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
@@ -36,11 +36,12 @@ for categoryItem in categoryList:
     for subCategoryItem in subCategoryList:
         subCategoryUrl = initialUrl + subCategoryItem['href']
         tempSubCategory = Category(
-            subCategoryUrl, subCategoryItem.text, tempCategory.name)
+            subCategoryUrl, subCategoryItem.text, tempCategory)
         categorySet.add(tempSubCategory)
+    categorySet.add(tempCategory)
 
 for categoryItem in categorySet:
-    if categoryItem.parentId == '':
+    if categoryItem.parentId == None:
         continue
     soup = useScrape(categoryItem.url)
     hasPagination = soup.find('div', class_='page-link')
