@@ -2,16 +2,16 @@ class Category:
     url = ''
     name = ''
 
-    def __init__(self, url, name, parentId=None) -> None:
+    def __init__(self, url, name, parentCategory=None) -> None:
         self.url = url
         self.name = name
-        self.parentId = parentId
+        self.parentCategory = parentCategory
 
     def getUrl(self) -> str:
         return self.url
 
 
-class location:
+class Location:
     city = ''
     district = ''
     exactAddress = ''
@@ -22,7 +22,7 @@ class location:
         self.exactAddress = exactAddress
 
 
-class contact:
+class Contact:
     phoneNumber = ''
     fax = ''
 
@@ -32,27 +32,32 @@ class Advertisement:
     url = ''
     company = ''
     title = ''
-    # ListInfo
-    roles = ''
-    requirements = ''
-    additionalInfo = ''
-    # OtherInfo
-    city = ''
-    district = ''
     level = ''
     type = ''
     minSalary = ''
     maxSalary = ''
     isDealable = ''
-    # ContactInfo
-    address = ''
-    phoneNumber = ''
-    fax = ''
+    location = Location
+    roles = ''
+    requirements = ''
+    additionalInfo = ''
+    contact = Contact
     adAddedDate = ''
 
     def __init__(self, url, title) -> None:
         self.url = url
         self.title = title
 
+    def setSalary(self, minSalary, maxSalary, isDealable) -> None:
+        self.minSalary = minSalary
+        self.maxSalary = maxSalary
+        self.isDealable =  isDealable
+
     def setCategory(self, category) -> None:
         self.category = category
+    
+    def setLocation(self, location) -> None:
+        self.location = location
+
+    def setContact(self, contact) -> None:
+        self.contact = contact

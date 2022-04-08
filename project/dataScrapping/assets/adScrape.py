@@ -76,38 +76,36 @@ def locationScrapper(location):
 def advertisementScrape(url) -> Advertisement:
     soup = useScrape(url)
     advertisement = Advertisement(url, soup.find('h3').text.strip())
-    companyTitle = soup.find('div', class_='nlp').find('td')
-    for item in companyTitle:
-        try:
+    try:
+        companyTitle = soup.find('div', class_='nlp').find('td')
+        for item in companyTitle:
             if item.name == None:
                 advertisement.company = textStrip(item.text)
-        except:
-            print('Company name scrape error')
-    # advertisement.company = textStrip(company)
+    except:
+        print('Company name scrape error')
 
-    # all items
     sections = soup.find_all('div', class_='section')
+    # all items
+    advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
+    advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
+    minSalary, maxSalary, isDealable = salaryScraper(
+        singleItemScraper(sections, 'Бусад', 'Цалин'))
+    advertisement.setSalary(minSalary, maxSalary, isDealable)
+    city, district = locationScrapper(
+        singleItemScraper(sections, 'Бусад', 'Байршил'))
+    advertisement.location.city = city
+    advertisement.location.district = district
+    advertisement.location.exactAddress = singleItemScraper(
+        sections, 'Холбоо барих', 'Хаяг')
     advertisement.roles = listScraper(
         sections, 'Гүйцэтгэх үндсэн үүрэг')
     advertisement.requirements = listScraper(
         sections, 'Ажлын байранд тавигдах шаардлага')
     advertisement.additionalInfo = listScraper(
         sections, 'Нэмэлт мэдээлэл')
-    advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
-    advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
-    minSalary, maxSalary, isDealable = salaryScraper(
-        singleItemScraper(sections, 'Бусад', 'Цалин'))
-    city, district = locationScrapper(
-        singleItemScraper(sections, 'Бусад', 'Байршил'))
-    advertisement.minSalary = minSalary
-    advertisement.maxSalary = maxSalary
-    advertisement.isDealable = isDealable
-    advertisement.city = city
-    advertisement.district = district
-    advertisement.address = singleItemScraper(sections, 'Холбоо барих', 'Хаяг')
-    advertisement.phoneNumber = singleItemScraper(
+    advertisement.contact.phoneNumber = singleItemScraper(
         sections, 'Холбоо барих', 'Утас')
-    advertisement.fax = singleItemScraper(
+    advertisement.contact.fax = singleItemScraper(
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')

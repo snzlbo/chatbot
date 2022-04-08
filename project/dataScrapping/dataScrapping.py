@@ -41,7 +41,7 @@ for categoryItem in categoryList:
     categorySet.add(tempCategory)
 
 for categoryItem in categorySet:
-    if categoryItem.parentId == None:
+    if categoryItem.parentCategory == None:
         continue
     soup = useScrape(categoryItem.url)
     hasPagination = soup.find('div', class_='page-link')
@@ -66,48 +66,44 @@ file.write('Parent Category Name' + '\t' +
            'Link' + '\t' +
            'Employee Company' + '\t' +
            'Title' + '\t' +
-           'Roles' + '\t' +
-           'Requirements' + '\t' +
-           'Additional Info' + '\t' +
-           'City/Province' + '\t' +
-           'District' + '\t'
            'Level' + '\t' +
            'Type' + '\t' +
            'Min Salary' + '\t' +
            'Max Salary' + '\t' +
            'Is Dealable' + '\t' +
-           'Address' + '\t' +
+           'City/Province' + '\t' +
+           'District' + '\t'
+           'Exact Address' + '\t' +
+           'Roles' + '\t' +
+           'Requirements' + '\t' +
+           'Additional Info' + '\t' +
            'Phone' + '\t' +
            'Fax' + '\t' +
            'Ad Added Date' + '\n')
-print(adUrlDict)
+
 for adUrl in adUrlDict:
-    print(adUrl)
-    try:
-        tempAdItem = useAdScrape(adUrl)
-        tempAdItem.setCategory(adUrlDict[adUrl])
-        file.write(
-            tempAdItem.category.parentId+'\t' +
-            tempAdItem.category.name+'\t' +
-            tempAdItem.url+'\t' +
-            tempAdItem.company+'\t' +
-            tempAdItem.title+'\t' +
-            tempAdItem.roles+'\t' +
-            tempAdItem.requirements+'\t' +
-            tempAdItem.additionalInfo+'\t' +
-            tempAdItem.city+'\t' +
-            tempAdItem.district+'\t' +
-            tempAdItem.level+'\t' +
-            tempAdItem.type+'\t' +
-            tempAdItem.minSalary+'\t' +
-            tempAdItem.maxSalary+'\t' +
-            tempAdItem.isDealable+'\t' +
-            tempAdItem.address+'\t' +
-            tempAdItem.phoneNumber+'\t' +
-            tempAdItem.fax+'\t' +
-            tempAdItem.adAddedDate+'\n')
-        del tempAdItem
-    except:
-        print('Ad writing error')
+    tempAdItem = useAdScrape(adUrl)
+    tempAdItem.setCategory(adUrlDict[adUrl])
+    file.write(
+        tempAdItem.category.parentCategory.name+'\t' +
+        tempAdItem.category.name+'\t' +
+        tempAdItem.url+'\t' +
+        tempAdItem.company+'\t' +
+        tempAdItem.title+'\t' +
+        tempAdItem.level+'\t' +
+        tempAdItem.type+'\t' +
+        tempAdItem.minSalary+'\t' +
+        tempAdItem.maxSalary+'\t' +
+        tempAdItem.isDealable+'\t' +
+        tempAdItem.location.city+'\t' +
+        tempAdItem.location.district+'\t' +
+        tempAdItem.location.exactAddress+'\t' +
+        tempAdItem.roles+'\t' +
+        tempAdItem.requirements+'\t' +
+        tempAdItem.additionalInfo+'\t' +
+        tempAdItem.contact.phoneNumber+'\t' +
+        tempAdItem.contact.fax+'\t' +
+        tempAdItem.adAddedDate+'\n')
+    del tempAdItem
 file.close()
 print("--- %s seconds ---" % (time.time() - start_time))
