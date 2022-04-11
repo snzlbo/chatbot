@@ -4,16 +4,19 @@ from assets.classTypes import Category
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.pagination import createLinkList as createLinkList
+from .dataCleaning import cleanData as useCleandata
 
 start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
 today = str(date.today())
+fileName = today+'adScrape.csv'
 # all categories set
 categorySet = set()
 # all advertisement's link set
 adUrlDict = {}
 # all ads object set
 adsSet = set()
+
 
 # scrape initial links
 soup = useScrape(initialUrl)
@@ -60,7 +63,7 @@ for categoryItem in categorySet:
     print(pagesUrl)
     pagesUrl.clear()
 
-file = open(today+'adScrape.csv', 'w', encoding='utf-8')
+file = open(fileName, 'w', encoding='utf-8')
 file.write('Parent Category Name' + '\t' +
            'Category Name ' + '\t' +
            'Link' + '\t' +
@@ -107,3 +110,6 @@ for adUrl in adUrlDict:
     del tempAdItem
 file.close()
 print("--- %s seconds ---" % (time.time() - start_time))
+
+data = useCleandata(fileName)
+data.to_csv('advertisement.csv')
