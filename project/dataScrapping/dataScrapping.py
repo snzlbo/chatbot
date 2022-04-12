@@ -4,7 +4,6 @@ from assets.classTypes import Category
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.pagination import createLinkList as createLinkList
-from .dataCleaning import cleanData as useCleandata
 
 start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
@@ -110,6 +109,3 @@ for adUrl in adUrlDict:
     del tempAdItem
 file.close()
 print("--- %s seconds ---" % (time.time() - start_time))
-
-data = useCleandata(fileName)
-data.to_csv('advertisement.csv')

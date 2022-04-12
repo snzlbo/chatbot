@@ -1,4 +1,5 @@
 class Category:
+    id = None
     url = ''
     name = ''
 
@@ -51,11 +52,11 @@ class Advertisement:
     def setSalary(self, minSalary, maxSalary, isDealable) -> None:
         self.minSalary = minSalary
         self.maxSalary = maxSalary
-        self.isDealable =  isDealable
+        self.isDealable = isDealable
 
     def setCategory(self, category) -> None:
         self.category = category
-    
+
     def setLocation(self, location) -> None:
         self.location = location
 

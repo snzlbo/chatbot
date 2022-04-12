@@ -2,7 +2,7 @@ import pandas as pd
 
 
 def cleanSalary(salary) -> float:
-    if isinstance(salary, str) and salary != '':
+    if isinstance(salary, str) and salary != '' and salary != 'None':
         return float(salary.replace(',', ''))
     return None
 
@@ -19,13 +19,18 @@ def cleanNone(text) -> str:
     return None
 
 
+def cleanData(fileName):
+    data_set = pd.read_csv(fileName, sep='\t', error_bad_lines=False)
+    return normalizeDataSet(data_set)
+
+
 def normalizeDataSet(data_set):
     ret = pd.DataFrame(columns=['parentCategory', 'category', 'url', 'employee',
                                 'jobTitle', 'level', 'type', 'minSalary', 'maxSalary', 'isDealable', 'city', 'district', 'exactAddress', 'roles', 'requirements', 'additionalInfo', 'phoneNumber', 'fax', 'publishedDate'])
     for index, row in data_set.iterrows():
-        maxSalary = row['Max Salary']
-        minSalary = row['Min Salary']
-        isDealable = cleanNone(row['Is Dealable'])
+        maxSalary = cleanSalary(row['Max Salary'])
+        minSalary = cleanSalary(row['Min Salary'])
+        isDealable = cleanDealable(row['Is Dealable'])
 
         if minSalary is None and maxSalary is None and isDealable is None:
             isDealable = None
@@ -53,11 +58,6 @@ def normalizeDataSet(data_set):
     return ret
 
 
-def cleanData(fileName):
-    data_set = pd.read_csv(fileName, sep='\t', error_bad_lines=False)
-    return normalizeDataSet(data_set)
-
-
-data = cleanData(
+get = cleanData(
     '/Users/fate/Desktop/Bachelor/employementAnalysis/project/dataScrapping/data/2022-04-08adScrape.csv')
-data.to_csv('advertisement.csv')
+get.to_csv('advertisement.csv')
