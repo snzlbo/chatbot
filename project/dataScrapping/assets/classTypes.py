@@ -1,9 +1,10 @@
 class Category:
-    id = None
+    id = ''
     url = ''
     name = ''
 
-    def __init__(self, url, name, parentCategory=None) -> None:
+    def __init__(self, id, url, name, parentCategory=None) -> None:
+        self.id = id
         self.url = url
         self.name = name
         self.parentCategory = parentCategory
@@ -29,6 +30,7 @@ class Contact:
 
 
 class Advertisement:
+    id = ''
     category = Category
     url = ''
     company = ''
@@ -48,6 +50,9 @@ class Advertisement:
     def __init__(self, url, title) -> None:
         self.url = url
         self.title = title
+
+    def setId(self, id) -> None:
+        self.id = id
 
     def setSalary(self, minSalary, maxSalary, isDealable) -> None:
         self.minSalary = minSalary

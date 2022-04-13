@@ -1,9 +1,11 @@
 from datetime import date
 import time
 from assets.classTypes import Category
+from assets.dbInsert import Category as PCategory
+from assets.dbInsert import Advertisement as PAdvertisement
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
-from assets.pagination import createLinkList as createLinkList
+from assets.spliter import createLinkList, splitUrl
 
 start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
@@ -29,16 +31,17 @@ for navigator in navigatorList:
 for categoryItem in categoryList:
     categories = categoryItem.find('a')
     url = initialUrl + categories['href']
-    tempCategory = Category(url, categories.text)
-    print('CATEGORY LINK SCRAPED! ', url)
+    tempCategory = Category(splitUrl(url, 'b.'), url, categories.text)
+    print('CATEGORY LINK SCRAPED! ', url, tempCategory.id)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
     # ALL SUBCATEGORY LINKS
     subCategoryList = subCategory.find_all('a')
     for subCategoryItem in subCategoryList:
         subCategoryUrl = initialUrl + subCategoryItem['href']
-        tempSubCategory = Category(
-            subCategoryUrl, subCategoryItem.text, tempCategory)
+        tempSubCategory = Category(splitUrl(subCategoryUrl, 'r.'),
+                                   subCategoryUrl, subCategoryItem.text, tempCategory)
+        print(tempSubCategory.id, tempSubCategory.parentCategory.id)
         categorySet.add(tempSubCategory)
     categorySet.add(tempCategory)
 
@@ -86,6 +89,7 @@ file.write('Parent Category Name' + '\t' +
 for adUrl in adUrlDict:
     tempAdItem = useAdScrape(adUrl)
     tempAdItem.setCategory(adUrlDict[adUrl])
+    tempAdItem.setId(splitUrl(adUrl, 'ad'))
     file.write(
         tempAdItem.category.parentCategory.name+'\t' +
         tempAdItem.category.name+'\t' +

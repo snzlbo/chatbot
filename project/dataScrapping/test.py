@@ -2,7 +2,7 @@ import time
 from assets.classTypes import Category
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
-from assets.pagination import createLinkList as createLinkList
+from assets.spliter import createLinkList, splitUrl
 
 start_time = time.time()
 # url = 'https://www.zangia.mn/job/_y1rqsntzr0'
@@ -111,4 +111,7 @@ adUrlDict = {}
 # file.close()
 # print("--- %s seconds ---" % (time.time() - start_time))
 
-test = useAdScrape('https://www.zangia.mn/job/_kbw5szv39a')
+adUrl = 'https://www.zangia.mn/job/_kbw5szv39a'
+test = useAdScrape(adUrl)
+test.setId(splitUrl(adUrl, 'ad'))
+print(test.id)
