@@ -42,7 +42,8 @@ def get_engine(user, password, host, port, db):
 
 def get_session():
     engine = get_database()
-    return sessionmaker(bind=engine)
+    session = sessionmaker(bind=engine)
+    return session()
 
 
 db = get_database()
