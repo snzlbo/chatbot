@@ -1,11 +1,11 @@
 from datetime import date
 import time
 from assets.classTypes import Category
-from assets.dbInsert import Category as PCategory
-from assets.dbInsert import Advertisement as PAdvertisement
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
+from insert import insert
+
 
 start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
@@ -32,6 +32,9 @@ for categoryItem in categoryList:
     categories = categoryItem.find('a')
     url = initialUrl + categories['href']
     tempCategory = Category(splitUrl(url, 'b.'), url, categories.text)
+    categoryRowItem = insert(Category)
+    del categoryRowItem
+
     print('CATEGORY LINK SCRAPED! ', url, tempCategory.id)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
