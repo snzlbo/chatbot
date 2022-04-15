@@ -1,9 +1,9 @@
-from assets.classTypes import Category
+from assets.classTypes import Advertisement, Category
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
 from connection import Base, db, session
-from insert import PCategory, insert
+from insert import PCategory, insertToCategory
 
 initialUrl = 'https://www.zangia.mn/'
 categorySet = set()
@@ -16,10 +16,12 @@ def upsertCategory(category: Category):
     row = session.query(PCategory).filter(PCategory._id == category.id).first()
     if row == None:
         if category.parentCategory != None:
-            insert(category, category.parentCategory.id)
+            insertToCategory(category, category.parentCategory.id)
         else:
-            insert(category, None)
+            insertToCategory(category, None)
     session.commit()
+
+def upsertAdvertisement(advertisement: Advertisement)
 
 
 # scrape initial links
