@@ -1,8 +1,12 @@
 import time
+
+from numpy import insert
 from assets.classTypes import Category
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
+from insert import insertToAdvertisement
+from connection import Base, db, session
 
 start_time = time.time()
 # url = 'https://www.zangia.mn/job/_y1rqsntzr0'
@@ -114,4 +118,10 @@ adUrlDict = {}
 adUrl = 'https://www.zangia.mn/job/_kbw5szv39a'
 test = useAdScrape(adUrl)
 test.setId(splitUrl(adUrl, 'ad'))
-print(test.id)
+
+print(type(test.minSalary))
+print(type(test.maxSalary))
+print(type(test.isDealable))
+print(test.category.id)
+insertToAdvertisement(test, 'r.1239')
+session.commit()

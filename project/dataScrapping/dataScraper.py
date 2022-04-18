@@ -3,7 +3,7 @@ from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
 from connection import Base, db, session
-from insert import PCategory, insertToCategory
+from insert import PAdvertisement, PCategory, insertToAdvertisement, insertToCategory
 
 initialUrl = 'https://www.zangia.mn/'
 categorySet = set()
@@ -20,8 +20,16 @@ def upsertCategory(category: Category):
         else:
             insertToCategory(category, None)
     session.commit()
+    print(category.id, 'CATEGORY UPSERT DONE')
 
-def upsertAdvertisement(advertisement: Advertisement)
+
+def upsertAdvertisement(advertisement: Advertisement, category: Category):
+    row = session.query(PAdvertisement).filter(
+        PCategory._id == advertisement.id).first()
+    if row == None:
+        insertToAdvertisement(advertisement, category)
+    session.commit()
+    print(advertisement.id, 'ADVERTISEMENT UPSERT DONE')
 
 
 # scrape initial links
@@ -51,28 +59,32 @@ for categoryItem in categoryList:
     categorySet.add(tempCategory)
 
 for categoryItem in categorySet:
-    upsertCategory(categoryItem)
-    # if categoryItem.parentCategory == None:
-    #     continue
-    # soup = useScrape(categoryItem.url)
-    # hasPagination = soup.find('div', class_='page-link')
-    # pagesUrl = []
-    # if hasPagination != None:
-    #     pagesUrl = createLinkList(hasPagination, categoryItem.url)
-    # else:
-    #     pagesUrl.append(categoryItem.url)
-    # for pageUrl in pagesUrl:
-    #     soup = useScrape(pageUrl)
-    #     ads = soup.find_all('div', class_='ad')
-    #     # CREATE UNIQUE AD DICTIONARY
-    #     for ad in ads:
-    #         adUrl = initialUrl+ad.find('a', class_=None)['href']
-    #         adUrlDict[adUrl] = categoryItem
-    # print(pagesUrl)
-    # pagesUrl.clear()
+    # upsertCategory(categoryItem)
+    if categoryItem.parentCategory == None:
+        continue
+    soup = useScrape(categoryItem.url)
+    hasPagination = soup.find('div', class_='page-link')
+    pagesUrl = []
+    if hasPagination != None:
+        pagesUrl = createLinkList(hasPagination, categoryItem.url)
+    else:
+        pagesUrl.append(categoryItem.url)
+    for pageUrl in pagesUrl:
+        soup = useScrape(pageUrl)
+        ads = soup.find_all('div', class_='ad')
+        # CREATE UNIQUE AD DICTIONARY
+        for ad in ads:
+            adUrl = initialUrl+ad.find('a', class_=None)['href']
+            adUrlDict[adUrl] = categoryItem
+    print(pagesUrl)
+    pagesUrl.clear()
 
-# for adUrl in adUrlDict:
-#     tempAdItem = useAdScrape(adUrl)
-#     tempAdItem.setCategory(adUrlDict[adUrl])
-#     tempAdItem.setId(splitUrl(adUrl, 'ad'))
-#     del tempAdItem
+for adUrl in adUrlDict:
+    tempAdItem = useAdScrape(adUrl)
+    tempAdItem.setCategory(adUrlDict[adUrl])
+    tempAdItem.setId(splitUrl(adUrl, 'ad'))
+    try:
+        upsertAdvertisement(tempAdItem, tempAdItem.category)
+    except:
+        print('Write to db error')
+    del tempAdItem

@@ -1,7 +1,6 @@
-import sys
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, String
 from sqlalchemy.orm import relationship
-from assets.classTypes import Category
+from assets.classTypes import Advertisement, Category
 from connection import Base, db, session
 
 
@@ -16,7 +15,7 @@ class PCategory(Base):
                                   onupdate='CASCADE',
                                   ondelete='CASCADE'),
                        nullable=True)
-    category = relationship('PCategory', backref='category')
+    category = relationship('PCategory')
 
 
 class PAdvertisement(Base):
@@ -41,22 +40,42 @@ class PAdvertisement(Base):
     types = Column(String)
     minSalary = Column(Float)
     maxSalary = Column(Float)
-    types = Column(String)
     isDealable = Column(Boolean)
     phoneNumber = Column(String)
     fax = Column(String)
     publishedDate = Column(DateTime)
-    category = relationship('PCategory', backref='category')
+    category = relationship('PCategory')
 
 
-def create():
+def createDB():
     Base.metadata.create_all(db)
 
 
 def insertToCategory(category: Category, parentId=None):
-    session.add(PCategory(_id=category.id, url=category.url,
-                name=category.name, parent_id=parentId))
-    session.commit()
+    session.add(PCategory(_id=category.id,
+                          url=category.url,
+                          name=category.name,
+                          parent_id=parentId))
 
 
-create()
+def insertToAdvertisement(advertisement: Advertisement, category: Category):
+    session.add(PAdvertisement(_id=advertisement.id,
+                               category_id=category.id,
+                               url=advertisement.url,
+                               company=advertisement.company,
+                               title=advertisement.title,
+                               roles=advertisement.roles,
+                               requirements=advertisement.requirements,
+                               additionalInfo=advertisement.additionalInfo,
+                               city=advertisement.location.city,
+                               district=advertisement.location.district,
+                               exactAddress=advertisement.location.exactAddress,
+                               level=advertisement.level,
+                               types=advertisement.type,
+                               minSalary=advertisement.minSalary,
+                               maxSalary=advertisement.maxSalary,
+                               isDealable=advertisement.isDealable
+                               ))
+
+
+# createDB()

@@ -1,6 +1,7 @@
 import re
 from .classTypes import Advertisement
 from .scrape import UseBeautifulSoup as useScrape
+from .cleanData import cleanAdObject
 
 
 def listScraper(sections, key) -> str:
@@ -111,5 +112,4 @@ def advertisementScrape(url) -> Advertisement:
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
     print('SINGLE AD SCRAPPING DONE!!!', url)
-
-    return advertisement
+    return cleanAdObject(advertisement)
