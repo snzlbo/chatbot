@@ -20,6 +20,26 @@ def cleanNone(text) -> str:
         return text
     return None
 
+def cleanAdObject(advertisement: Advertisement) -> Advertisement:
+    advertisement.level = cleanNone(advertisement.level)
+    advertisement.type = cleanNone(advertisement.type)
+    advertisement.minSalary = cleanSalary(advertisement.minSalary)
+    advertisement.maxSalary = cleanSalary(advertisement.minSalary)
+    advertisement.isDealable = cleanDealable(advertisement.minSalary)
+    advertisement.location.city = cleanNone(advertisement.location.city)
+    advertisement.location.district = cleanNone(
+        advertisement.location.district)
+    advertisement.location.exactAddress = cleanNone(
+        advertisement.location.exactAddress)
+    advertisement.roles = cleanNone(advertisement.roles)
+    advertisement.requirements = cleanNone(advertisement.requirements)
+    advertisement.additionalInfo = cleanNone(advertisement.additionalInfo)
+    advertisement.contact.phoneNumber = cleanNone(
+        advertisement.contact.phoneNumber)
+    advertisement.contact.fax = cleanNone(advertisement.contact.fax)
+    advertisement.adAddedDate = cleanNone(advertisement.adAddedDate)
+
+    return advertisement
 
 # def cleanData(fileName):
 #     data_set = pd.read_csv(fileName, sep='\t', error_bad_lines=False)
@@ -58,28 +78,6 @@ def cleanNone(text) -> str:
 #                           'publishedDate': cleanNone(row['Ad Added Date'])
 #                           }, ignore_index=True)
 #     return ret
-
-
-def cleanAdObject(advertisement: Advertisement) -> Advertisement:
-    advertisement.level = cleanNone(advertisement.level)
-    advertisement.type = cleanNone(advertisement.type)
-    advertisement.minSalary = cleanSalary(advertisement.minSalary)
-    advertisement.maxSalary = cleanSalary(advertisement.minSalary)
-    advertisement.isDealable = cleanDealable(advertisement.minSalary)
-    advertisement.location.city = cleanNone(advertisement.location.city)
-    advertisement.location.district = cleanNone(
-        advertisement.location.district)
-    advertisement.location.exactAddress = cleanNone(
-        advertisement.location.exactAddress)
-    advertisement.roles = cleanNone(advertisement.roles)
-    advertisement.requirements = cleanNone(advertisement.requirements)
-    advertisement.additionalInfo = cleanNone(advertisement.additionalInfo)
-    advertisement.contact.phoneNumber = cleanNone(
-        advertisement.contact.phoneNumber)
-    advertisement.contact.fax = cleanNone(advertisement.contact.fax)
-    advertisement.adAddedDate = cleanNone(advertisement.adAddedDate)
-
-    return advertisement
 
 
 # get = cleanData(

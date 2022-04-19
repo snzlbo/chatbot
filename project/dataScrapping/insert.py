@@ -1,3 +1,4 @@
+from re import L
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, String
 from sqlalchemy.orm import relationship
 from assets.classTypes import Advertisement, Category
@@ -16,6 +17,15 @@ class PCategory(Base):
                                   ondelete='CASCADE'),
                        nullable=True)
     category = relationship('PCategory')
+
+    def __init__(self, category: Category):
+        self._id = category.id
+        self.url = category.url
+        self.name = category.name
+        if category.parentCategory != None:
+            self.parent_id = category.parentCategory.id
+        else:
+            self.parent_id = None
 
 
 class PAdvertisement(Base):
@@ -46,36 +56,67 @@ class PAdvertisement(Base):
     publishedDate = Column(DateTime)
     category = relationship('PCategory')
 
+    def __init__(self, advertisement: Advertisement):
+        self._id = advertisement.id
+        self.category_id = advertisement.category.id
+        self.url = advertisement.url
+        self.company = advertisement.company
+        self.title = advertisement.title
+        self.roles = advertisement.roles
+        self.requirements = advertisement.requirements
+        self.city = advertisement.location.city
+        self.district = advertisement.location.district
+        self.exactAddress = advertisement.location.exactAddress
+        self.level = advertisement.level
+        self.types = advertisement.type
+        self.minSalary = advertisement.minSalary
+        self.maxSalary = advertisement.maxSalary
+        self.isDealable = advertisement.isDealable
+        self.phoneNumber = advertisement.contact.phoneNumber
+        self.fax = advertisement.contact.fax
+        self.publishedDate = advertisement.adAddedDate
+
 
 def createDB():
     Base.metadata.create_all(db)
 
 
-def insertToCategory(category: Category, parentId=None):
-    session.add(PCategory(_id=category.id,
-                          url=category.url,
-                          name=category.name,
-                          parent_id=parentId))
+def insertToCategory(category: Category):
+    session.add(PCategory(category))
 
 
-def insertToAdvertisement(advertisement: Advertisement, category: Category):
-    session.add(PAdvertisement(_id=advertisement.id,
-                               category_id=category.id,
-                               url=advertisement.url,
-                               company=advertisement.company,
-                               title=advertisement.title,
-                               roles=advertisement.roles,
-                               requirements=advertisement.requirements,
-                               additionalInfo=advertisement.additionalInfo,
-                               city=advertisement.location.city,
-                               district=advertisement.location.district,
-                               exactAddress=advertisement.location.exactAddress,
-                               level=advertisement.level,
-                               types=advertisement.type,
-                               minSalary=advertisement.minSalary,
-                               maxSalary=advertisement.maxSalary,
-                               isDealable=advertisement.isDealable
-                               ))
+def insertToAdvertisement(advertisement: Advertisement):
+    session.add(PAdvertisement(advertisement))
 
 
-# createDB()
+def upsertCategory(category: Category):
+    if(category.parentCategory != None):
+        upsertCategory(category.parentCategory)
+    row = session.query(PCategory).filter(PCategory._id == category.id)
+    if row.first() == None:
+        if category.parentCategory != None:
+            insertToCategory(category, category.parentCategory.id)
+        else:
+            insertToCategory(category, None)
+    else:
+        dict = PCategory(category).__dict__
+        del dict['_sa_instance_state']
+        row.update(dict, synchronize_session=False)
+    session.commit()
+    print(category.id, 'CATEGORY UPSERT DONE')
+
+
+def upsertAdvertisement(advertisement: Advertisement, category: Category):
+    row = session.query(PAdvertisement).filter(
+        PAdvertisement._id == advertisement.id)
+    if row.first() == None:
+        insertToAdvertisement(advertisement, category)
+    else:
+        dict = PAdvertisement(advertisement).__dict__
+        del dict['_sa_instance_state']
+        row.update(dict, synchronize_session=False)
+    session.commit()
+    print(advertisement.id, 'ADVERTISEMENT UPSERT DONE')
+
+
+createDB()

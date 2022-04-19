@@ -1,12 +1,12 @@
 import time
 
 from numpy import insert
-from assets.classTypes import Category
+from assets.classTypes import Category, Contact
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
-from insert import insertToAdvertisement
-from connection import Base, db, session
+from insert import PAdvertisement, PCategory, insertToAdvertisement
+from connection import session
 
 start_time = time.time()
 # url = 'https://www.zangia.mn/job/_y1rqsntzr0'
@@ -115,13 +115,22 @@ adUrlDict = {}
 # file.close()
 # print("--- %s seconds ---" % (time.time() - start_time))
 
-adUrl = 'https://www.zangia.mn/job/_kbw5szv39a'
+parentCate = Category(
+    'b.19', 'https://www.zangia.mn/job/list/b.19', 'Аялал жуулчлал, зочид буудал')
+cate = Category('r.486', 'https://www.zangia.mn/job/list/b.19/r.486',
+                'Аялал жуулчлалын менежмент', parentCate)
+contact = Contact('75055005', 'a')
+adUrl = 'https://www.zangia.mn/job/_cbewxy0m2b'
 test = useAdScrape(adUrl)
+test.setCategory(cate)
+test.setContact(contact)
 test.setId(splitUrl(adUrl, 'ad'))
 
-print(type(test.minSalary))
-print(type(test.maxSalary))
-print(type(test.isDealable))
-print(test.category.id)
-insertToAdvertisement(test, 'r.1239')
+dict = PAdvertisement(test).__dict__
+del dict['_sa_instance_state']
+row = session.query(PAdvertisement).filter(PAdvertisement._id == test.id)
+if row.first() == None:
+    insertToAdvertisement(test)
+else:
+    row.update(dict, synchronize_session=False)
 session.commit()

@@ -3,42 +3,18 @@ from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
 from connection import Base, db, session
-from insert import PAdvertisement, PCategory, insertToAdvertisement, insertToCategory
+from insert import upsertAdvertisement, upsertCategory
 
 initialUrl = 'https://www.zangia.mn/'
 categorySet = set()
 adUrlDict = {}
 
 
-def upsertCategory(category: Category):
-    if(category.parentCategory != None):
-        upsertCategory(category.parentCategory)
-    row = session.query(PCategory).filter(PCategory._id == category.id).first()
-    if row == None:
-        if category.parentCategory != None:
-            insertToCategory(category, category.parentCategory.id)
-        else:
-            insertToCategory(category, None)
-    session.commit()
-    print(category.id, 'CATEGORY UPSERT DONE')
-
-
-def upsertAdvertisement(advertisement: Advertisement, category: Category):
-    row = session.query(PAdvertisement).filter(
-        PCategory._id == advertisement.id).first()
-    if row == None:
-        insertToAdvertisement(advertisement, category)
-    session.commit()
-    print(advertisement.id, 'ADVERTISEMENT UPSERT DONE')
-
-
-# scrape initial links
 soup = useScrape(initialUrl)
 navigatorList = soup.find_all('div', class_='filter')
 for navigator in navigatorList:
     if navigator.find('h3').text.strip() != 'Салбар, мэргэжил':
         continue
-    # ALL CATEGORY LINKS
     categoryList = navigator.find_all('div')
 
 for categoryItem in categoryList:
@@ -48,18 +24,15 @@ for categoryItem in categoryList:
     print('CATEGORY LINK SCRAPED! ', url, tempCategory.id)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
-    # ALL SUBCATEGORY LINKS
     subCategoryList = subCategory.find_all('a')
     for subCategoryItem in subCategoryList:
         subCategoryUrl = initialUrl + subCategoryItem['href']
         tempSubCategory = Category(splitUrl(subCategoryUrl, 'r.'),
                                    subCategoryUrl, subCategoryItem.text, tempCategory)
-        print(tempSubCategory.id, tempSubCategory.parentCategory.id)
         categorySet.add(tempSubCategory)
     categorySet.add(tempCategory)
 
 for categoryItem in categorySet:
-    # upsertCategory(categoryItem)
     if categoryItem.parentCategory == None:
         continue
     soup = useScrape(categoryItem.url)
@@ -72,7 +45,6 @@ for categoryItem in categorySet:
     for pageUrl in pagesUrl:
         soup = useScrape(pageUrl)
         ads = soup.find_all('div', class_='ad')
-        # CREATE UNIQUE AD DICTIONARY
         for ad in ads:
             adUrl = initialUrl+ad.find('a', class_=None)['href']
             adUrlDict[adUrl] = categoryItem

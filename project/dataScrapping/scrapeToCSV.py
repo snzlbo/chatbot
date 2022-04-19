@@ -10,21 +10,15 @@ start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
 today = str(date.today())
 fileName = today+'adScrape.csv'
-# all categories set
 categorySet = set()
-# all advertisement's link set
 adUrlDict = {}
-# all ads object set
-adsSet = set()
 
 
-# scrape initial links
 soup = useScrape(initialUrl)
 navigatorList = soup.find_all('div', class_='filter')
 for navigator in navigatorList:
     if navigator.find('h3').text.strip() != 'Салбар, мэргэжил':
         continue
-    # ALL CATEGORY LINKS
     categoryList = navigator.find_all('div')
 
 for categoryItem in categoryList:
@@ -57,7 +51,6 @@ for categoryItem in categorySet:
     for pageUrl in pagesUrl:
         soup = useScrape(pageUrl)
         ads = soup.find_all('div', class_='ad')
-        # CREATE UNIQUE AD DICTIONARY
         for ad in ads:
             adUrl = initialUrl+ad.find('a', class_=None)['href']
             adUrlDict[adUrl] = categoryItem

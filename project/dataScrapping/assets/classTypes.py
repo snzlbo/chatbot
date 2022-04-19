@@ -28,6 +28,10 @@ class Contact:
     phoneNumber = ''
     fax = ''
 
+    def __init__(self, phoneNumber=None, fax=None) -> None:
+        self.phoneNumber = phoneNumber
+        self.fax = fax
+
 
 class Advertisement:
     id = ''
