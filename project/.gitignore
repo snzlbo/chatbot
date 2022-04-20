@@ -1,0 +1,5 @@
+/node_modules
+
+.vscode
+
+local_settings.py
