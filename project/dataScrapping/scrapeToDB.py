@@ -33,6 +33,7 @@ for categoryItem in categoryList:
     categorySet.add(tempCategory)
 
 for categoryItem in categorySet:
+    # upsertCategory(categoryItem)
     if categoryItem.parentCategory == None:
         continue
     soup = useScrape(categoryItem.url)

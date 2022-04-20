@@ -5,8 +5,7 @@ from assets.classTypes import Category, Contact
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
 from assets.spliter import createLinkList, splitUrl
-from insert import PAdvertisement, PCategory, insertToAdvertisement
-from connection import session
+from insert import upsertAdvertisement
 
 start_time = time.time()
 # url = 'https://www.zangia.mn/job/_y1rqsntzr0'
@@ -119,18 +118,10 @@ parentCate = Category(
     'b.19', 'https://www.zangia.mn/job/list/b.19', 'Аялал жуулчлал, зочид буудал')
 cate = Category('r.486', 'https://www.zangia.mn/job/list/b.19/r.486',
                 'Аялал жуулчлалын менежмент', parentCate)
-contact = Contact('75055005', 'a')
-adUrl = 'https://www.zangia.mn/job/_cbewxy0m2b'
+contact = Contact('75055005', None)
+adUrl = 'https://www.zangia.mn/job/_uf_xqlzvv3'
 test = useAdScrape(adUrl)
 test.setCategory(cate)
 test.setContact(contact)
 test.setId(splitUrl(adUrl, 'ad'))
-
-dict = PAdvertisement(test).__dict__
-del dict['_sa_instance_state']
-row = session.query(PAdvertisement).filter(PAdvertisement._id == test.id)
-if row.first() == None:
-    insertToAdvertisement(test)
-else:
-    row.update(dict, synchronize_session=False)
-session.commit()
+upsertAdvertisement(test)

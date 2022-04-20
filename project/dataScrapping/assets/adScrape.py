@@ -49,7 +49,6 @@ def singleItemScraper(sections, key, subKey) -> str:
 
 
 def salaryScraper(salary):
-    print(salary)
     isDealable = ''
     k = re.split(r'[^\d,]+', salary, 2, re.IGNORECASE)
     if len(k) < 2:
@@ -111,5 +110,4 @@ def advertisementScrape(url) -> Advertisement:
         sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
         sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
-    print('SINGLE AD SCRAPPING DONE!!!', url)
     return cleanAdObject(advertisement)

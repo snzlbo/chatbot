@@ -24,7 +24,7 @@ def cleanAdObject(advertisement: Advertisement) -> Advertisement:
     advertisement.level = cleanNone(advertisement.level)
     advertisement.type = cleanNone(advertisement.type)
     advertisement.minSalary = cleanSalary(advertisement.minSalary)
-    advertisement.maxSalary = cleanSalary(advertisement.minSalary)
+    advertisement.maxSalary = cleanSalary(advertisement.maxSalary)
     advertisement.isDealable = cleanDealable(advertisement.minSalary)
     advertisement.location.city = cleanNone(advertisement.location.city)
     advertisement.location.district = cleanNone(

@@ -64,6 +64,7 @@ class PAdvertisement(Base):
         self.title = advertisement.title
         self.roles = advertisement.roles
         self.requirements = advertisement.requirements
+        self.additionalInfo = advertisement.additionalInfo
         self.city = advertisement.location.city
         self.district = advertisement.location.district
         self.exactAddress = advertisement.location.exactAddress
@@ -106,11 +107,11 @@ def upsertCategory(category: Category):
     print(category.id, 'CATEGORY UPSERT DONE')
 
 
-def upsertAdvertisement(advertisement: Advertisement, category: Category):
+def upsertAdvertisement(advertisement: Advertisement):
     row = session.query(PAdvertisement).filter(
         PAdvertisement._id == advertisement.id)
     if row.first() == None:
-        insertToAdvertisement(advertisement, category)
+        insertToAdvertisement(advertisement)
     else:
         dict = PAdvertisement(advertisement).__dict__
         del dict['_sa_instance_state']
