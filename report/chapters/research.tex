@@ -52,16 +52,7 @@ Domino's pizza хоолны газар нь захиалгын алхмаас э
   \caption{WHO's chat bot}\label{fig:chatbotWHO}
 \end{figure}
 \section{Технологийн судалгаа}
-\@title-ыг хөгжүүлэхдээ өгөгдөл цуглуулгыг \textit{python} хэлний сан болох \textit{BeautifulSoup} HTML өгөгдөл задлах технологийг ашигласан бөгөөд чатбот системийн түлхүүр үг таних технологийг \textit{Python} хэлний \textit{Framework} болох \textit{SentenceTransformers}-ийг сонгон хөгжүүлэлтийг хийсэн. Харин цуглуулсан өгөгдлийг \textit{CSV} файлд хадгалан, \textit{Microsoft Bot Framework}-ийг чатбот хөгжүүлэлтэд ашиглан судалгааг дараах байдлаар хийсэн болно. 
-\subsection{Python}
-Python нь дээд түвшний маш олон төрлийн програмчлалыг өөртөө шингээсэн хэл юм. Хэлний сан болон \textit{framework}-үүд нь тасралтгүй сайжирч, шинэчлэгдэж байдаг тул бүх л төрлийн програмчлалын аргуудыг гүйцэтгэж болдог. Орчин үед машин сургалт, хиймэл оюун ухаан болон эх хэлний боловсруулалтад(NLP) түгээмэл ашигладаг болсон бөгөөд веб хүртэл хийх боломжтойгоороо давуу талтай юм. Үүнээс гадна анхлан суралцаж буй хүмүүст ойлгоход хялбар \textit{syntax}-ийн дүрэмтэй байдаг тул хэрэглэгчдийн тоо нь javascript, java хэлүүдтэй өрсөлдөхүйц байдаг. 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=4.5cm]{images/pythonLogo.png}
-  \caption{Python лого}\label{fig:pythonLogo}
-\end{figure}
-\lstinputlisting[language=Python, caption=Python энгийн жишээ]{code/pythonTest.py}
-Python програмчлалын хэл нь ойлгоход маш хялбар бөгөөд өөр дээрх функцууд нь шууд утгаараа ойлгомжтой байдаг. Syntax-ийн хувьд ; ашигладаггүй ба догол мөрөөр програмчлалын үндсэн схемийг гаргадгаараа онцлог хэл юм.
+\@title-ыг хөгжүүлэхдээ өгөгдөл цуглуулгыг \textit{python} хэлний сан болох \textit{BeautifulSoup} HTML өгөгдөл задлах технологийг ашигласан бөгөөд чатбот системийн үндсэн хөгжүүлэлтийг \textit{Microsoft Bot Framework}-ийн тусламжтайгаар \textit{javascript} хэл дээр хөгжүүлэлтийг хийж гүйцэтгэсэн. Харин цуглуулсан өгөгдлийг AWS-EC2 сүлжээнд байршуулсан бөгөөд дүн шинжилгээ хийхдээ \textit{CSV} файлд хадгалан ашигласан бөгөөд судалгааг дараах байдлаар хийсэн болно. 
 \subsection{BeautifulSoup}
 Өгөгдөл цуглуулгын олон технологиудын нэг нь \textit{BeautifulSoup} бөгөөд \textit{python} програмчлалын хэлний сан юм. Энэ нь өгсөн вебсайтын хаяг (Url)-ийн дагуу бүх HTML өгөгдлийг агуулгын хамтаар нь хэрэглэгчид өгдөг. HTML хэл нь мод хэлбэртэй байдаг бөгөөд түүний хүүхэд элементүүдийн агуулгыг шаардлага болон түлхүүр үгийн дагуу цуглуулах зарчмаар ажилладаг. 
 \begin{figure}[ht]
@@ -76,6 +67,29 @@ Python програмчлалын хэл нь ойлгоход маш хялба
   \includegraphics[height=5.5cm]{images/bsExample.png}
 	\caption{Өгөгдөл цуглуулалтын жишээний үр дүн}\label{fig:resultBS}
 \end{figure}
+\subsection{Amazon-Web-Services}
+Амазон веб үйлчилгээ нь үүлэн тооцооллын системд суурилсан бөгөөд хувь хүн, байгууллагуудад сервер, нөөц хадгалах сан, сүлжээ, и-мэйл, алсын зайн удирдлага, виртуал машины удирдлага зэрэг үйлчилгээг өгдөг Амазоны охин компани юм. Чатбот системийн хувьд AWS-EC2 буюу үүлэн технологид суурилсан виртуал машиныг ашигласан үндсэн өгөгдөл хадгалах сан болгон ашигласан юм. 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{images/aws-ec2.png}
+  \caption{AWS-EC2 Server тасралтгүй ажиллах үр дүн} \label{fig:aws-ec2}
+\end{figure}
+\subsection{PostgreSQL}
+PostgreSQL нь үнэ төлбөргүй, нээлттэй эхийн \textit{relational database management system} SQL-ийн ажиллах зарчимтай адил. Үүнийг маш олон веб, гар утасны аппликейшний үндсэн өгөгдлийн сан болгон ашигласан байдаг. Тэдгээрийн нэгэн адилаар бакалаврын судалгааны ажлын хүрээнд ажлын байр олгогчдын мэдээллийг AWS-EC2-д байрлах PostgreSQL өгөгдлийн санд хадгалах зарчмаар ажилласан юм. 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=8cm]{images/postgresConnection.png}
+  \caption{EC2 дээрх PostgreSQL өгөгдлийн сантай холбогдсон үр дүн}\label{fig:postgresConnection}
+\end{figure}
+\subsection{SQLAlchemy - ORM}
+\textit{Object-relational-mapping (ORM)} нь систем хооронд өгөгдлийг дамжуулахад объект хандалтат програмчлалын хэлийг ашигладаг програмчлалын техник буюу арга юм. \textit{SQLAlchemy} нь дээрх ORM аргыг хэрэгжүүлдэг Python хэлний нээлттэй эхийн SQL хэрэглүүр юм. 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=5  cm]{images/connection.png}
+  \caption{SQLAlchemy өгөгдлийн сантай холбогдох нь} \label{fig:connection}
+\end{figure}
+\\Өгөгдлийн сантай шууд объектоор харьцах боломжийг олгодгоороо давуу талтай бөгөөд чатбот системийн хувьд яг тохирсон технологи юм. Жишээ болгож ангилал классыг доорх зурагт харуулав.
+\lstinputlisting[language=Python, firstline=8, lastline=19, caption=PostgreSQL-тэй харьцах объектын класс]{code/insert.py} 
 \subsection{SentenceTransformers}
 Python хэлний framework болох SentenceTransformers \cite{sentenceTransform} буюу өгүүлбэр хувиргалт нь өгүүлбэр болон текстийн ижил төстэй байдал болон утгын хувьд адил байдлыг \textit{cosine-similarity}\footnote{Cosine-similarity нь өгөгдлийн шинжилгээнд 2 тооны ижил төстэй байдлыг вектор үржвэрээр илэрхийлдэг.}-ийн тусламжтайгаар тооцоолдог. Энэхүү тооцооллыг цаашид өгүүлбэрийн ижил төстэй байдлыг харьцуулах, хайлт хийх, түүнд шинжилгээ хийх зэргээр ашиглаж болно. Доорх зурагт өгүүлбэрт хувиргалт хийж, шинжилгээний үр дүнгийн вектор хоорондын өнцгөөр хэрхэн тодорхойлогддог болох талаар харуулав.
 \begin{figure}[ht]
@@ -84,12 +98,7 @@ Python хэлний framework болох SentenceTransformers \cite{sentenceTran
   \caption{Cosine similarity утгын график}\label{fig:cosineSimilarity}
 \end{figure}
 \\SentenceTransformers-ийг дэлхийн 100 гаруй хэл дээр урьдчилан бэлтгэн, сургасан эх хэлний боловсруулалт (NLP)-ын загваруудыг ашиглаж болдгоороо давуу талтай.
-\begin{figure}[ht]
-  \centering 
-  \includegraphics[height=5cm]{images/sbertLogo.png}
-  \caption{SBERT.net лого}\label{fig:sbertLogo}
-\end{figure}
-\\Чатбот системийн хувьд монгол хэлийг танин ашиглах боломжтой загвар болох \textit{distiluse-base-multilingual-cased-v2}\cite{sbert}-ийг ашиглан хийж гүйцэтгэв.
+\\Чатбот системийн хувьд монгол хэлийг танин ашиглах боломжтой загвар болох \textit{distiluse-base-multilingual-cased-v2}\cite{sbert}-ийг ашиглаж цаашид ашиглагдахуйц моделийг дүрсэлсэн.
 \\Хоёр өгүүлбэрийг \textit{cosine-similarity} ашиглан ижил төстэй байдлыг илэрхийлэх жишээг доор харууллаа. Эх кодыг utf-8 формат танихгүй байсан тул зураг хэлбэрээр орууллаа.
 \\
 \begin{figure}[ht]

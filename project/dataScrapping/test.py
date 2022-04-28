@@ -119,7 +119,7 @@ parentCate = Category(
 cate = Category('r.486', 'https://www.zangia.mn/job/list/b.19/r.486',
                 'Аялал жуулчлалын менежмент', parentCate)
 contact = Contact('75055005', None)
-adUrl = 'https://www.zangia.mn/job/_uf_xqlzvv3'
+adUrl = 'https://www.zangia.mn/job/_2f+xnf5w9o'
 test = useAdScrape(adUrl)
 test.setCategory(cate)
 test.setContact(contact)
