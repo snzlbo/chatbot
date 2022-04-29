@@ -57,7 +57,7 @@ for adUrl in adUrlDict:
     tempAdItem.setCategory(adUrlDict[adUrl])
     tempAdItem.setId(splitUrl(adUrl, 'ad'))
     try:
-        upsertAdvertisement(tempAdItem, tempAdItem.category)
+        upsertAdvertisement(tempAdItem)
     except:
         print('Write to db error')
     del tempAdItem
