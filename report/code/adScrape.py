@@ -1,6 +1,7 @@
 import re
 from .classTypes import Advertisement
 from .scrape import UseBeautifulSoup as useScrape
+from .cleanData import cleanAdObject
 
 
 def listScraper(sections, key) -> str:
@@ -51,8 +52,11 @@ def salaryScraper(salary):
     isDealable = ''
     k = re.split(r'[^\d,]+', salary, 2, re.IGNORECASE)
     if len(k) < 2:
-        [a] = k[0:1]
-        return a, a
+        [a] = k[0]
+        return a, a, isDealable
+    if k[1] == '':
+        a = k[0]
+        return a, a, isDealable
     [a, b] = k[0:2]
     if len(k) > 2:
         isDealable = 'Тохиролцоно'
@@ -73,42 +77,37 @@ def locationScrapper(location):
 def advertisementScrape(url) -> Advertisement:
     soup = useScrape(url)
     advertisement = Advertisement(url, soup.find('h3').text.strip())
-    companyTitle = soup.find('div', class_='nlp').find('td')
-    for item in companyTitle:
-        try:
+    try:
+        companyTitle = soup.find('div', class_='nlp').find('td')
+        for item in companyTitle:
             if item.name == None:
                 advertisement.company = textStrip(item.text)
-        except:
-            print('Company name scrape error')
-    # advertisement.company = textStrip(company)
+    except:
+        print('Company name scrape error')
 
-    # all items
     sections = soup.find_all('div', class_='section')
-    advertisement.roles = listScraper(
-        sections, 'Guitsetgeh undsen uurerg')
-    advertisement.requirements = listScraper(
-        sections, 'Ajliin bairnii shaardlaga')
-    advertisement.additionalInfo = listScraper(
-        sections, 'Nemelt medeelel')
-    advertisement.level = singleItemScraper(sections, 'Busad', 'Tuvshin')
-    advertisement.type = singleItemScraper(sections, 'Busad', 'Turul')
+    # all items
+    advertisement.level = singleItemScraper(sections, 'Бусад', 'Түвшин')
+    advertisement.type = singleItemScraper(sections, 'Бусад', 'Төрөл')
     minSalary, maxSalary, isDealable = salaryScraper(
-        singleItemScraper(sections, 'Busad', 'Tsalin'))
+        singleItemScraper(sections, 'Бусад', 'Цалин'))
+    advertisement.setSalary(minSalary, maxSalary, isDealable)
     city, district = locationScrapper(
-        singleItemScraper(sections, 'Busad', 'Bairshil'))
-    advertisement.minSalary = minSalary
-    advertisement.maxSalary = maxSalary
-    advertisement.isDealable = isDealable
-    advertisement.city = city
-    advertisement.district = district
-    advertisement.address = singleItemScraper(sections, 'Холбоо барих', 'Хаяг')
-    advertisement.phoneNumber = singleItemScraper(
-        sections, 'Holboo barih', 'Utas')
-    advertisement.fax = singleItemScraper(
-        sections, 'Holboo barih', 'Fax')
+        singleItemScraper(sections, 'Бусад', 'Байршил'))
+    advertisement.location.city = city
+    advertisement.location.district = district
+    advertisement.location.exactAddress = singleItemScraper(
+        sections, 'Холбоо барих', 'Хаяг')
+    advertisement.roles = listScraper(
+        sections, 'Гүйцэтгэх үндсэн үүрэг')
+    advertisement.requirements = listScraper(
+        sections, 'Ажлын байранд тавигдах шаардлага')
+    advertisement.additionalInfo = listScraper(
+        sections, 'Нэмэлт мэдээлэл')
+    advertisement.contact.phoneNumber = singleItemScraper(
+        sections, 'Холбоо барих', 'Утас')
+    advertisement.contact.fax = singleItemScraper(
+        sections, 'Холбоо барих', 'Факс')
     advertisement.adAddedDate = singleItemScraper(
-        sections, 'Zariin hugatsaa', 'Zar niitelsen ognoo')
-    print(advertisement.additionalInfo)
-    print('SINGLE AD SCRAPPING DONE!!!', url)
-
-    return advertisement
+        sections, 'Зарын хугацаа', 'Зар нийтлэсэн огноо')
+    return cleanAdObject(advertisement)

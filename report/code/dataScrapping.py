@@ -1,45 +1,39 @@
-from datetime import date
-import time
-from assets.classTypes import Category
+from assets.classTypes import Advertisement, Category
 from assets.scrape import UseBeautifulSoup as useScrape
 from assets.adScrape import advertisementScrape as useAdScrape
-from assets.pagination import createLinkList as createLinkList
+from assets.spliter import createLinkList, splitUrl
+from connection import Base, db, session
+from insert import upsertAdvertisement, upsertCategory
 
-start_time = time.time()
 initialUrl = 'https://www.zangia.mn/'
-today = str(date.today())
-# all categories set
 categorySet = set()
-# all advertisement's link set
 adUrlDict = {}
-# all ads object set
-adsSet = set()
 
-# scrape initial links
 soup = useScrape(initialUrl)
 navigatorList = soup.find_all('div', class_='filter')
 for navigator in navigatorList:
     if navigator.find('h3').text.strip() != 'Salbar, mergejil':
         continue
-    # ALL CATEGORY LINKS
     categoryList = navigator.find_all('div')
 
 for categoryItem in categoryList:
     categories = categoryItem.find('a')
     url = initialUrl + categories['href']
-    tempCategory = Category(url, categories.text, '')
+    tempCategory = Category(splitUrl(url, 'b.'), url, categories.text)
+    print('CATEGORY LINK SCRAPED! ', url, tempCategory.id)
     soup = useScrape(url)
     subCategory = soup.find('div', class_='pros')
-    # ALL SUBCATEGORY LINKS
     subCategoryList = subCategory.find_all('a')
     for subCategoryItem in subCategoryList:
         subCategoryUrl = initialUrl + subCategoryItem['href']
-        tempSubCategory = Category(
-            subCategoryUrl, subCategoryItem.text, tempCategory.name)
+        tempSubCategory = Category(splitUrl(subCategoryUrl, 'r.'),
+                                   subCategoryUrl, subCategoryItem.text, tempCategory)
         categorySet.add(tempSubCategory)
+    categorySet.add(tempCategory)
 
 for categoryItem in categorySet:
-    if categoryItem.parentId == '':
+    upsertCategory(categoryItem)
+    if categoryItem.parentCategory == None:
         continue
     soup = useScrape(categoryItem.url)
     hasPagination = soup.find('div', class_='page-link')
@@ -51,60 +45,18 @@ for categoryItem in categorySet:
     for pageUrl in pagesUrl:
         soup = useScrape(pageUrl)
         ads = soup.find_all('div', class_='ad')
-        # CREATE UNIQUE AD DICTIONARY
         for ad in ads:
             adUrl = initialUrl+ad.find('a', class_=None)['href']
             adUrlDict[adUrl] = categoryItem
+    print(pagesUrl)
     pagesUrl.clear()
 
-file = open(today+'adScrape.csv', 'w', encoding='utf-8')
-file.write('Parent Category Name' + '\t' +
-           'Category Name ' + '\t' +
-           'Link' + '\t' +
-           'Employee Company' + '\t' +
-           'Title' + '\t' +
-           'Roles' + '\t' +
-           'Requirements' + '\t' +
-           'Additional Info' + '\t' +
-           'City/Province' + '\t' +
-           'District' + '\t'
-           'Level' + '\t' +
-           'Type' + '\t' +
-           'Min Salary' + '\t' +
-           'Max Salary' + '\t' +
-           'Is Dealable' + '\t' +
-           'Address' + '\t' +
-           'Phone' + '\t' +
-           'Fax' + '\t' +
-           'Ad Added Date' + '\n')
-
 for adUrl in adUrlDict:
-    print(adUrl)
+    tempAdItem = useAdScrape(adUrl)
+    tempAdItem.setCategory(adUrlDict[adUrl])
+    tempAdItem.setId(splitUrl(adUrl, 'ad'))
     try:
-        tempAdItem = useAdScrape(adUrl)
-        tempAdItem.setCategory(adUrlDict[adUrl])
-        file.write(
-            tempAdItem.category.parentId+'\t' +
-            tempAdItem.category.name+'\t' +
-            tempAdItem.url+'\t' +
-            tempAdItem.company+'\t' +
-            tempAdItem.title+'\t' +
-            tempAdItem.roles+'\t' +
-            tempAdItem.requirements+'\t' +
-            tempAdItem.additionalInfo+'\t' +
-            tempAdItem.city+'\t' +
-            tempAdItem.district+'\t' +
-            tempAdItem.level+'\t' +
-            tempAdItem.type+'\t' +
-            tempAdItem.minSalary+'\t' +
-            tempAdItem.maxSalary+'\t' +
-            tempAdItem.isDealable+'\t' +
-            tempAdItem.address+'\t' +
-            tempAdItem.phoneNumber+'\t' +
-            tempAdItem.fax+'\t' +
-            tempAdItem.adAddedDate+'\n')
-        del tempAdItem
+        upsertAdvertisement(tempAdItem, tempAdItem.category)
     except:
-        print('Ad writing error')
-file.close()
-print("--- %s seconds ---" % (time.time() - start_time))
+        print('Write to db error')
+    del tempAdItem
