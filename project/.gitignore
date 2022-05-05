@@ -1,8 +1,0 @@
-node_modules
-
-local_settings.py
-
-__pycache__
-
-.vscode
-.DS_Store
