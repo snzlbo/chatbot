@@ -1,0 +1,14 @@
+node_modules
+
+local_settings.py
+
+__pycache__
+
+.vscode
+.DS_Store
+*.ipynb
+*.ipynb_checkpoints
+
+.env
+.DS_STORE
+.eslintrc.js
