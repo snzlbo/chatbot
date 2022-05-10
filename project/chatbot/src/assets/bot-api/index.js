@@ -8,7 +8,9 @@ class ApiHelper {
   }
 
   async responseBack() {
-    if (this.getQuery == 404){
+    var query = this.getQuery()
+    console.log('query:', query)
+    if (query === 404) {
       return undefined
     }
     var query = this.getQuery()
@@ -19,16 +21,21 @@ class ApiHelper {
       throw res
     }
     var responseBody = await res.json()
-    console.log(responseBody)
+    console.log('Response:', responseBody)
     return responseBody
   }
 
   getQuery() {
-    if (this.questionNumber == 1) {
-      return util.format('/ad/company=%s&title=%s', this.keyword[0].trim().replace(' ', '%20'), this.keyword[1].trim().replace(' ', '%20'))
-    }
-    if (this.questionNumber == 404){
-      return 404
+    switch (this.questionNumber) {
+      case 1:
+        return util.format('/ad/company=%s&title=%s', this.keyword[0].trim().replace(' ', '%20'), this.keyword[1].trim().replace(' ', '%20'))
+        break
+      case 2:
+        return util.format('/ad/comp=%s', this.keyword.trim().replace(' ', '%20'))
+        break
+      case 404:
+        return 404
+        break
     }
   }
 }

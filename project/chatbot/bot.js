@@ -14,10 +14,9 @@ class EchoBot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             const question = new QuestionUnderstand(context.activity.text);
             const api = new ApiHelper(question.findKeyWord(), question.getQueryNumber())
-            console.log(question.queryNumber, api.keyword)
+            console.log('keyword: ' + api.keyword)
             var responseBody = await api.responseBack()
-
-            if (!(responseBody === undefined) && !(responseBody.length == 0)) {
+            if (!(responseBody === undefined) && !(responseBody.length === 0)) {
                 const view = new CardBuilder(responseBody);
                 switch (question.getQueryNumber()) {
                     case 1:
@@ -28,6 +27,16 @@ class EchoBot extends ActivityHandler {
                     case 404:
                         await context.sendActivity(
                             MessageFactory.text('noResponse')
+                        )
+                }
+            }
+            if (responseBody.length === 0) {
+                switch (question.getQueryNumber()) {
+                    case 1:
+                        const tempApi = new ApiHelper(api.keyword[0], 2)
+                        var secondAnswer = await tempApi.responseBack()
+                        await context.sendActivity(
+                            MessageFactory.text('length: ' + secondAnswer.length)
                         )
                 }
             }

@@ -7,7 +7,7 @@ const router = Router()
 router.get('/', useGetAds.getAdvertisements)
 router.get('/id=:id', useGetAd.getAdvertisementById)
 router.get('/company=:company&title=:title', useGetAd.getAdvertisementByTitleCompany)
-// router.get('/comp=:comp', useGetAd.getAdvertisementByCompany)
+router.get('/comp=:comp', useGetAd.getAdvertisementByCompany)
 // router.get('/title=:title', useGetAd.getAdvertisementByTitle)
 
 
