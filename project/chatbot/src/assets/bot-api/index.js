@@ -14,7 +14,7 @@ class ApiHelper {
       return undefined
     }
     var query = this.getQuery()
-    const host = 'http://localhost:4000/api/v1'
+    const host = 'http://3.228.127.116:4000/api/v1'
     const url = host + query
     var res = await fetch(url)
     if (!res.ok) {
