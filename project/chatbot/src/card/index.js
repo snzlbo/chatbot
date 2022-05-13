@@ -6,15 +6,15 @@ class CardBuilder {
   }
 
   createAdvertisementCard() {
-    let it = 0;
-    var cardData = {
-      "type": "AdaptiveCard",
-      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-      "version": "1.2",
-      "body": [],
-      "actions": []
-    }
+    var ret = []
     for (let index = 0; index < this.body.length; index++) {
+      var cardData = {
+        "type": "AdaptiveCard",
+        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.2",
+        "body": [],
+        "actions": []
+      }
       const element = this.body[index]
       cardData["body"].push({
         "type": "TextBlock",
@@ -79,60 +79,77 @@ class CardBuilder {
         "title": "Дэлгэрэнгүй харах",
         "url": element['url']
       })
-      return CardFactory.adaptiveCard(cardData);
+      ret.push(CardFactory.adaptiveCard(cardData))
     }
+    return ret
   };
-  createListCard() {
-    var listData = {
-      "contentType": "application/vnd.microsoft.teams.card.list",
-      "content": {
-        "title": "Card title",
-        "items": [
+  createListCard(title) {
+    var cardData = {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.2",
+      "type": "AdaptiveCard",
+      "body": [{
+        "type": "TextBlock",
+        "size": "Medium",
+        "weight": "Bold",
+        "text": title + "-д нээлттэй ажлын байрууд:",
+        "wrap": true,
+        "style": "heading"
+      }, {
+        "type": "TextBlock",
+        "text": "Нийт: " + this.body.length + " ажлын байр байна",
+        "wrap": true
+      }],
+      "actions": []
+    }
+    for (let index = 0; index < this.body.length; index++) {
+      const element = this.body[index];
+      cardData['body'].push({
+        "type": "ColumnSet",
+        "columns": [
           {
-            "type": "file",
-            "id": "https://contoso.sharepoint.com/teams/new/Shared%20Documents/Report.xlsx",
-            "title": "Report",
-            "subtitle": "teams > new > design",
-            "tap": {
-              "type": "imBack",
-              "value": "editOnline https://contoso.sharepoint.com/teams/new/Shared%20Documents/Report.xlsx"
-            }
+            "type": "Column",
+            "items": [
+              {
+                "type": "Image",
+                "style": "Person",
+                "url": "https://cdn-icons-png.flaticon.com/512/2103/2103862.png",
+                "size": "Small"
+              }
+            ],
+            "width": "auto"
           },
           {
-            "type": "resultItem",
-            "icon": "https://cdn2.iconfinder.com/data/icons/social-icons-33/128/Trello-128.png",
-            "title": "Trello title",
-            "subtitle": "A Trello subtitle",
-            "tap": {
-              "type": "openUrl",
-              "value": "http://trello.com"
-            }
-          },
-          {
-            "type": "section",
-            "title": "Manager"
-          },
-          {
-            "type": "person",
-            "id": "JohnDoe@contoso.com",
-            "title": "John Doe",
-            "subtitle": "Manager",
-            "tap": {
-              "type": "imBack",
-              "value": "whois JohnDoe@contoso.com"
-            }
-          }
-        ],
-        "buttons": [
-          {
-            "type": "imBack",
-            "title": "Select",
-            "value": "whois"
+            "type": "Column",
+            "items": [
+              {
+                "type": "TextBlock",
+                "spacing": "None",
+                "text": element['company'],
+                "wrap": true
+              },
+              {
+                "type": "TextBlock",
+                "weight": "Bold",
+                "spacing": "None",
+                "text": element['title'],
+                "wrap": true
+              },
+              {
+                "type": "TextBlock",
+                "spacing": "None",
+                "text": (element['maxSalary'] || element['minSalary']) ? element['minSalary'] + ' - ' + element['maxSalary'] : 'Тохиролцоно',
+                "isSubtle": true,
+                "wrap": true
+              }
+            ],
+            "width": "stretch"
           }
         ]
-      }
+      })
     }
-    return listData
+    return CardFactory.adaptiveCard(cardData)
   }
 }
 

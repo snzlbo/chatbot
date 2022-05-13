@@ -21,7 +21,6 @@ class ApiHelper {
       throw res
     }
     var responseBody = await res.json()
-    console.log('Response:', responseBody)
     return responseBody
   }
 
