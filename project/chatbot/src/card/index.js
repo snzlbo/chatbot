@@ -7,6 +7,8 @@ class CardBuilder {
 
   createAdvertisementCard() {
     var ret = []
+    const d = new Date()
+    d.toLocaleDateString
     for (let index = 0; index < this.body.length; index++) {
       var cardData = {
         "type": "AdaptiveCard",
@@ -47,7 +49,7 @@ class CardBuilder {
           }, {
             "type": "TextBlock",
             "spacing": "None",
-            "text": "Нийтлэгдсэн " + element['publishedDate'],
+            "text": "Нийтлэгдсэн " + new Date(element['publishedDate']).toLocaleDateString('zh-Hans-CN'),
             "isSubtle": true,
             "wrap": true
           }],
@@ -56,6 +58,7 @@ class CardBuilder {
       }, {
         "type": "TextBlock",
         "text": element['roles'],
+        "maxLines": 3,
         "wrap": true
       }, {
         "type": "FactSet",
@@ -69,7 +72,7 @@ class CardBuilder {
           "title": "Төрөл:",
           "value": element['types']
         }, {
-          "title": "Утас",
+          "title": "Утас:",
           "value": element['phoneNumber']
         }]
       }
@@ -107,6 +110,78 @@ class CardBuilder {
       const element = this.body[index];
       cardData['body'].push({
         "type": "ColumnSet",
+        "spacing": "Medium",
+        "separator": true,
+        "columns": [
+          {
+            "type": "Column",
+            "items": [
+              {
+                "type": "Image",
+                "style": "Person",
+                "url": "https://cdn-icons-png.flaticon.com/512/2103/2103862.png",
+                "size": "Small"
+              }
+            ],
+            "width": "auto"
+          },
+          {
+            "type": "Column",
+            "items": [
+              {
+                "type": "TextBlock",
+                "spacing": "None",
+                "text": element['company'],
+                "wrap": true
+              },
+              {
+                "type": "TextBlock",
+                "weight": "Bold",
+                "spacing": "None",
+                "text": element['title'],
+                "wrap": true
+              },
+              {
+                "type": "TextBlock",
+                "spacing": "None",
+                "text": (element['maxSalary'] || element['minSalary']) ? element['minSalary'] + ' - ' + element['maxSalary'] : 'Тохиролцоно',
+                "isSubtle": true,
+                "wrap": true
+              }
+            ],
+            "width": "stretch"
+          }
+        ]
+      })
+    }
+    return CardFactory.adaptiveCard(cardData)
+  }
+  createSalaryListCard(title) {
+    var cardData = {
+      "type": "AdaptiveCard",
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "version": "1.2",
+      "type": "AdaptiveCard",
+      "body": [{
+        "type": "TextBlock",
+        "size": "Medium",
+        "weight": "Bold",
+        "text": title + "-аас өндөр цалинтай нээлттэй ажлын байрууд:",
+        "wrap": true,
+        "style": "heading"
+      }, {
+        "type": "TextBlock",
+        "text": "Нийт: " + this.body.length + " ажлын байр байна",
+        "wrap": true
+      }],
+      "actions": []
+    }
+    for (let index = 0; index < this.body.length; index++) {
+      const element = this.body[index];
+      cardData['body'].push({
+        "type": "ColumnSet",
+        "spacing": "Medium",
+        "separator": true,
         "columns": [
           {
             "type": "Column",

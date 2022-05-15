@@ -2,21 +2,20 @@ const { ActivityHandler, MessageFactory, ActivityTypes } = require('botbuilder')
 const { QuestionUnderstand } = require('./src/assets/question-understand/index');
 const { ApiHelper } = require('./src/assets/bot-api/index')
 const { CardBuilder } = require('./src/card/index')
+const welcome = require('./src/card/welcome')
 
 
 class EchoBot extends ActivityHandler {
     constructor() {
         super();
-        const defaultAnswer =
-            '💡Хүссэн байгууллагынхаа ажлын байрны мэдээллийг цаг алдалгүй аваарай. (Жишээлбэл: Голомт Банк-д Менежер ажлын байрны дэлгэрэнгүй мэдээлэл?)💡Байгууллагын нээлттэй ажлын байрыг '
         const noResponse =
-            'Уучлаарай таны асуултад хариулт олдсонгүй. Одоогоор чатботны хариулж чадах асуулт:'
+            'Уучлаарай таны асуултад хариулт олдсонгүй.'
         this.onMessage(async (context, next) => {
             const question = new QuestionUnderstand(context.activity.text);
             const api = new ApiHelper(question.findKeyWord(), question.getQueryNumber())
-            console.log('keyword: ' + api.keyword)
+            console.log('keyword: ' + api.keyword + ' quest: ' + question.getQueryNumber())
             var responseBody = await api.responseBack()
-            console.log(responseBody)
+            console.log('response:' + responseBody)
             if (typeof (responseBody) != 'undefined') {
                 if ((responseBody.length !== 0)) {
                     const view = new CardBuilder(responseBody);
@@ -29,13 +28,43 @@ class EchoBot extends ActivityHandler {
                                 })
                             }
                             break
+                        case 2:
+                            await context.sendActivity({
+                                attachments: [view.createListCard(api.keyword)]
+                            })
+                            break
+                        case 3:
+                            var content = view.createAdvertisementCard()
+                            for (let index = 0; index < content.length; index++) {
+                                await context.sendActivity({
+                                    attachments: [content[index]]
+                                })
+                            }
+                            break
+                        case 4:
+                            await context.sendActivity({
+                                attachments: [view.createSalaryListCard(api.keyword[0])]
+                            })
+                            break
                         case 404:
                             await context.sendActivity(
                                 MessageFactory.text(noResponse, noResponse)
                             )
+                            await context.sendActivity({
+                                attachments: [welcome.questionsCard()]
+                            });
+                            break
+                        default:
+                            await context.sendActivity(
+                                MessageFactory.text(noResponse, noResponse)
+                            )
+                            await context.sendActivity({
+                                attachments: [welcome.questionsCard()]
+                            });
+                            break
                     }
                 }
-                if (responseBody.length === 0) {
+                else {
                     switch (question.getQueryNumber()) {
                         case 1:
                             const tempApi = new ApiHelper(api.keyword[0], 2)
@@ -51,12 +80,23 @@ class EchoBot extends ActivityHandler {
                                 attachments: [view.createListCard(api.keyword[0])]
                             })
                             break
+                        default:
+                            await context.sendActivity(
+                                MessageFactory.text('Уучлаарай таны асуултад ажлын байр олдсонгүй.')
+                            )
+                            await context.sendActivity({
+                                attachments: [welcome.questionsCard()]
+                            })
+                            break
                     }
                 }
             }
             else {
+                console.log('here')
                 await context.sendActivity(MessageFactory.text(noResponse, noResponse));
-                await context.sendActivity(MessageFactory.text(defaultAnswer, defaultAnswer));
+                await context.sendActivity({
+                    attachments: [welcome.questionsCard()]
+                });
             }
             await next();
         });
@@ -68,7 +108,9 @@ class EchoBot extends ActivityHandler {
             for (let cnt = 0; cnt < membersAdded.length; ++cnt) {
                 if (membersAdded[cnt].id !== context.activity.recipient.id) {
                     await context.sendActivity(MessageFactory.text(welcomeText, welcomeText));
-                    await context.sendActivity(MessageFactory.text(defaultAnswer, defaultAnswer));
+                    await context.sendActivity({
+                        attachments: [welcome.questionsCard()]
+                    });
                 }
             }
             await next();

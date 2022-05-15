@@ -14,9 +14,13 @@ class ApiHelper {
       return undefined
     }
     var query = this.getQuery()
-    const host = 'http://3.228.127.116:4000/api/v1'
+    const host = 'http://localhost:4000/api/v1'
     const url = host + query
-    var res = await fetch(url)
+    try {
+      var res = await fetch(url)
+    } catch (error) {
+      console.error(error)
+    }
     if (!res.ok) {
       throw res
     }
@@ -32,6 +36,11 @@ class ApiHelper {
       case 2:
         return util.format('/ad/comp=%s', this.keyword.trim().replace(' ', '%20'))
         break
+      case 3:
+        return util.format('/ad/types=%s&title=%s', this.keyword[0].trim().replace(' ', '%20'), this.keyword[1].trim().replace(' ', '%20'))
+        break
+      case 4:
+        return util.format('/ad/salary=%s&title=%s', this.keyword[0].trim().replace(' ', '%20'), this.keyword[1].trim().replace(' ', '%20'))
       case 404:
         return 404
         break
