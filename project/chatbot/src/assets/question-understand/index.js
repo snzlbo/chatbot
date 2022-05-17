@@ -16,22 +16,38 @@ class QuestionUnderstand {
     switch (this.getTypeOfQuestion()) {
       case 1:
         this.queryNumber = 1
-        var keyword = this.contextText.substring(0, this.contextText.search('ажлын байр')).trim().split('-д')
-        return keyword
+        var isFound = this.contextText.search('ажлын байр')
+        if (isFound !== -1) {
+          return this.contextText.substring(0, isFound).trim().split('-д')
+        }
+        return this.contextText.trim().split('-д')
         break
       case 2:
         this.queryNumber = 2
-        var keyword = this.contextText.substring(0, this.contextText.search('-д')).trim()
-        return keyword
+        return this.contextText.substring(0, this.contextText.search('-д')).trim()
         break
       case 3:
         this.queryNumber = 3
-        var keyword = this.contextText.substring(0, this.contextText.search('ажлын байр')).trim().split('цагийн')
-        return keyword
+        var isFound = this.contextText.search('ажлын байр')
+        if (isFound !== -1) {
+          return this.contextText.substring(0, isFound).trim().split('цагийн')
+        }
+        return this.contextText.trim().split('цагийн')
         break
       case 4:
         this.queryNumber = 4
-        var keyword = this.contextText.substring(0, this.contextText.search('ажлын байр')).trim().split('цалинтай')
+        var isFound = this.contextText.search('ажлын байр')
+        if (isFound !== -1) {
+          var keyword = this.contextText.substring(0, isFound).trim().split('цалинтай')
+          if (keyword[0].search('сая')) {
+            keyword[0] = keyword[0].replace(' ', '').replace('сая', '000000')
+          }
+          return keyword
+        }
+        var keyword = this.contextText.trim().split('цалинтай')
+        if (keyword[0].search('сая')) {
+          keyword[0] = keyword[0].replace(' ', '').replace('сая', '000000')
+        }
         return keyword
         break
       default:

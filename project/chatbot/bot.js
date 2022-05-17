@@ -92,7 +92,6 @@ class EchoBot extends ActivityHandler {
                 }
             }
             else {
-                console.log('here')
                 await context.sendActivity(MessageFactory.text(noResponse, noResponse));
                 await context.sendActivity({
                     attachments: [welcome.questionsCard()]

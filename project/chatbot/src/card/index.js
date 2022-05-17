@@ -83,6 +83,7 @@ class CardBuilder {
         "url": element['url']
       })
       ret.push(CardFactory.adaptiveCard(cardData))
+      if (index > 50) break
     }
     return ret
   };
@@ -153,6 +154,7 @@ class CardBuilder {
           }
         ]
       })
+      if (index > 50) break
     }
     return CardFactory.adaptiveCard(cardData)
   }
@@ -223,6 +225,7 @@ class CardBuilder {
           }
         ]
       })
+      if (index > 50) break
     }
     return CardFactory.adaptiveCard(cardData)
   }
