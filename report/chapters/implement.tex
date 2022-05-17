@@ -39,12 +39,19 @@ Zangia.mn ажлын байрны зарын вебсайтаас бакалав
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth-4cm]{images/crontab.png}
-  \caption{crontab editor}\label{fig:crontab}
+  \caption{Виртуал машин дээрх crontab}\label{fig:crontab}
 \end{figure}
 \newpage
 \subsection{Өгөгдлийг нэгтгэх, цэвэрлэх}
 Ихэнх цуглуулсан өгөгдөл нь өгөгдлийн сангийн диаграмын дагуу амжилттай цуглуулсан бөгөөд дүн шинжилгээ хийх боломжтой өгөгдлүүдийг тусад нь хадгалж ашигласан болно. Data scrape хийх явцад бүх өгөгдлийг \textit{string} хэлбэрээр цуглуулсан бол өгөгдөлд дүн шинжилгээ хийх явцад энэ нь тохиромжгүй тул цалинг \textit{float} тохиролцох эсэхийг \textit{boolean} болгож өөрчлөв. 
 \lstinputlisting[language=Python, firstline=16, lastline=30, caption=Өгөгдөл цэвэрлэх функц]{code/dataVisiulization.py}
+\subsection{API ажиллуулах}
+Чатбот системд шаардлагатай RestAPI-ийг express.js ашиглан хөгжүүлсэний дараа backend-ийг виртуал машин дээрээ ажиллуулсан. Ингэхдээ node.js -ийн сан болох \textit{pm2}-ийг ашиглав.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth-4cm]{images/pm2.png}
+  \caption{Виртуал машин дээрх pm2}\label{fig:crontab}
+\end{figure}
 \newpage
 \subsection{Өгөгдлийн статистик}
 Өөрчлөлт хийсэн өгөгдөл буюу нийт 8202 зарын өгөгдөл дээрээ дүн шинжилгээ хийж, цаашид үүнийгээ чатбот хөгжүүлэлт, асуулт хариултын загварт тусгахыг зорив.
@@ -68,8 +75,7 @@ Zangia.mn ажлын байрны зарын вебсайтаас бакалав
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{graphics/4.png}
-  \caption{Өгөгдлийн статистик-3}
-  \label{fig:statistics3}
+  \caption{Өгөгдлийн статистик-3}\label{fig:statistics3}
 \end{figure}
 \newpage
 \textbf{Статистик - 4}
@@ -77,8 +83,7 @@ Zangia.mn ажлын байрны зарын вебсайтаас бакалав
 \begin{figure}[ht]
   \centering
   \includegraphics[width=15cm]{graphics/5.png}
-  \caption{Өгөгдлийн статистик-4}
-  \label{fig:statistics5}
+  \caption{Өгөгдлийн статистик-4}\label{fig:statistics5}
 \end{figure}
 \newpage
 \textbf{Статистик - 5}
@@ -86,36 +91,98 @@ Zangia.mn ажлын байрны зарын вебсайтаас бакалав
 \begin{figure}[ht]
   \centering
   \includegraphics[width=15cm]{graphics/6.png}
-  \caption{Өгөгдлийн статистик-5}
-  \label{fig:statistics6}
+  \caption{Өгөгдлийн статистик-5}\label{fig:statistics6}
+\end{figure}
+\\Дээрх статисткууд дээр үндэслэн, хэрэглэгчдэд хүртээмжтэй, нийтлэг асуултуудыг дараах байдлаар зохиомжлов. 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=8cm]{images/questions.png}
+  \caption{Чатботын хариулж чадах асуултууд}\label{fig:questions}
 \end{figure}
 
 \newpage
 \subsection{Чатбот хөгжүүлэлт}
 Чатбот нь хэрэглэгчийн асуултаас онцлох түлхүүр үгшийг шүүж түүнд тохирох API-ын дагуу AWS дээр байрших өгөгдлийн санруу хүсэлт явуулна. API нь RESTful API бөгөөд express.js ажиллаж үр дүнд JSON өгөгдөл авна. Bot Framework нь тэрхүү өгөгдлийг  \textit{AdaptiveCard}-ын тусламжтайгаар хэрэглэгчдэд ойлгогдохуйц болгон харуулна. Үүний дараа хэрэглэгчид хариултыг буцаах зарчмаар чатбот систем нь ажиллах юм. Энэхүү процессыг алхам алхамаар хэрэгжүүлж тайлбарлая. Хэрэглэгч чатботтой холбогдох үед чатботын хариулж чадах асуултыг харуулна. Хэрэглэгч өөрийн шаардлагад нийцүүлэн асуултаас сонгож чатботоос асууна. 
 
-Эхлээд ашиглагдах REST API-г бэлдэж хэрэглэгчийн асуултад цаг алдалгүй хариулдаг байх шаардлагатай. Иймд express.js ашиглан PostgreSQL-ээс өгөгдлийг JSON-оор авах API бичиж өгсөн. API controller код дотоод орчинд ажиллах бөгөөд нь дараах байдалтай байна. 
-\lstinputlisting[language=Python, caption=REST API controller]{code/chatbotCode/rest.js}
+Эхлээд ашиглагдах REST API-г бэлдэж хэрэглэгчийн асуултад цаг алдалгүй хариулдаг байх шаардлагатай. Иймд express.js ашиглан PostgreSQL-ээс өгөгдлийг JSON-оор авах API бичиж өгсөн. ApiHepler код дээр дурдсанчлан виртуал машин дээр ажиллах бөгөөд нь дараах байдалтай байна. 
+\lstinputlisting[language=Python, firstline=5, caption=REST API controller]{code/chatbotCode/rest.js}
 
-Үүний дараа хэрэгэлгчийн асуусан асуултад хариулахад бэлэн болох бөгөөд дараах код нь хэрэглэгчийн асуултыг таньж query үүсгэхэд туслана. Асуултын төрлийг таньсаны дараа асуултаас шаардлагатай query entity-г олж авна. 
-\lstinputlisting[language=Python,  firstline=7, lastline=11, caption=question-understand классын кодын жишээ 1]{code/chatbotCode/questionUnderstand.js}
-\lstinputlisting[language=Python,  firstline=13, lastline=20, caption=question-understand классын кодын жишээ 2]{code/chatbotCode/questionUnderstand.js}
+Үүний дараа хэрэгэлгчийн асуусан асуултад хариулахад бэлэн болох бөгөөд дараах код нь хэрэглэгчийн асуултыг таньж query үүсгэхэд туслана. Асуултын төрлийг таньсаны дараа асуултаас шаардлагатай query-дэх түлхүүр үгийг олж авна. 
+\lstinputlisting[language=Python,  firstline=7, lastline=13, caption=Question-understand классын кодын жишээ 1]{code/chatbotCode/questionUnderstand.js}
+\lstinputlisting[language=Python,  firstline=15, lastline=21, caption=Question-understand классын кодын жишээ 2]{code/chatbotCode/questionUnderstand.js}
 
 Ингэж query параметрийг түлхүүр үгийн тусламжтайгаар тодорхойлсны дараа API-аар хандаж өгөгдлийг авахад бэлэн болно. Үүний үр дүнд өгөгдлийн санруу явах query бэлэн болно. 
-\lstinputlisting[language=Python,  firstline=23, lastline=27, caption=query бэлтгэх кодын жишнээ]{code/chatbotCode/apiHelper.js}
+\lstinputlisting[language=Python,  firstline=33, lastline=37, caption=query бэлтгэх кодын жишнээ]{code/chatbotCode/apiHelper.js}
 
 Дараах кодын хэсэг нь дотоод орчинд ажиллаж буй REST API controller-ыг ашиглан хүсэлт явуулж байна. Үр дүнд нь асуултын хариулт болох JSON объектыг авч байна. 
 
-\lstinputlisting[language=Python,  firstline=11, lastline=21, caption=JSON хүлээж авах кодын жишээ.]{code/chatbotCode/apiHelper.js}
+\lstinputlisting[language=Python,  firstline=10, lastline=30, caption=JSON хүлээж авах кодын жишээ.]{code/chatbotCode/apiHelper.js}
 Тухайн үр дүнгээ хэрэглэгчид ойлгогдохоор харуулах шаардлагатай. Үүний тулд Microsoft Bot Framework-ийн картын төрлүүдийг ашигласан. Карт нь олон төрлийн хувилбаруудтай бөгөөд тэр дундаас ”Adaptive Cards”-ыг сонгосон.
 
-\lstinputlisting[language=Python,  firstline=9, lastline=84, caption=Хэрэглэгчийн UI дүрслэх кодын жишээ.]{code/chatbotCode/cardBuilder.js}
-Хэрэглэгчид харагдах байдлыг өөрийн хүссэнээр уян хатан зохион байгуулах боломжийг ”Adaptive Cards” олгодог бөгөөд эмх цэгцтэй мэдээллийг хүргэхэд туслах юм.
+\lstinputlisting[language=Python,  firstline=10, lastline=88, caption=Хэрэглэгчийн UI дүрслэх кодын жишээ.]{code/chatbotCode/cardBuilder.js}
+Хэрэглэгчид харагдах байдлыг өөрийн хүссэнээр уян хатан зохион байгуулах боломжийг ”Adaptive Cards” олгодог бөгөөд эмх цэгцтэй мэдээллийг хүргэхэд туслах юм. AdaptiveCard нь JSON хэлбэртэй өгөгдлийн хадгалдаг бөгөөд үндсэн 5 төрлийн өгөгдөлтэй байна. Үүнд:
+\begin{itemize}
+  \item type: Microsoft Botframework нь өөр олон төрлийн картуудтай бөгөөд энд тэдгээрийг зааж өгнө. 
+  \item schema: Энд картын эх буюу схемийн хаягийг тодорхойлно.
+  \item version: Сонгосон төрлийн картын ямар хувилбарыг ашиглах болохыг зааж өгнө.
+  \item body: Энд карт доторх бүх контент буюу мэдээллүүд байна.
+  \item actions: Хэрэв карт нь ямар нэг төрлийн товчтой байвал тэдгээр нь юу хийх талаар програмчлана. ( OnClick() г.м )
+\end{itemize}
 
-\newpage
-Голомт Банк-д Хуульч ажлын байрны дэлгэрэнгүй мэдээлэл асуултын хариулт хэрэглэгчид харагдах байдал :
+\section{Үр дүн}
+Энэхүү хэсэгт асуулт бүрийн хэрэгжүүлэлтийн хэрэглэгчдэд харагдах байдлыг дүрсэлсэн болно. 
+\subsection{Угтах текст}
+Угтах текстийг шинэ хэрэглэгч болон чатлаагүй удсан хэрэглэгчдэд харуулна. Энэ нь хэрэглэгчийн session дээр суурилсан байна. 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=10cm]{images/userUI.png}
-  \caption{Хэрэглэгчид харагдах байдал}\label{fig:userUI}
+  \includegraphics[width=\textwidth]{images/welcomeText.png}
+  \caption{Угтах тескт}\label{fig:welcomeUI}
+\end{figure}
+\subsection{Байгууллагын ажлын байрны дэлгэрэнгүй мэдээлэл}
+Ажиллахыг хүссэн байгууллын нэрийг ажлын байрны нэрийн хамтаар асуух нь хамгийн нийтлэг байх бөгөөд тухайн байгууллагын ажлын байрны нэрээр хайлт хийж хэрэглэгчдэд дэлгэрэнгүй мэдээллийг харуулна. 
+\begin{itemize}
+  \item Голомт Банк-д дизайнер ажлын байрны дэлгэрэнгүй мэдээлэл асуултын хариулт хэрэглэгчид харагдах байдал:
+\end{itemize}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth-4cm]{images/question1.png}
+  \caption{<Байгууллага>-д <ажил> ажлын байрны мэдээлэл?}\label{fig:quest1}
+\end{figure}
+Хэрэв тухайн байгууллагад хайсан ажлын байрны нээлттэй зарын мэдээлэл байхгүй тохиолдолд байгууллагын нээлттэй ажлын байруудын мэдээллийг дүрслэнэ.
+\begin{figure}[ht]
+  \includegraphics[width=\textwidth-4cm]{images/question1-2.png}
+  \caption{Бусад ажлын байрууд} \label{fig:quest1-2}
+\end{figure}
+\newpage
+\subsection{Байгууллагын нээлттэй ажлын байруудын мэдээлэл}
+Ажиллахыг хүссэн байгууллын нэрийн дагуу нээлттэй ажлын байруудыг харах боломжтой.
+\begin{itemize}
+  \item Голомт Банк-д нээлттэй ажлын байруудын мэдээлэл асуултын хариулт хэрэглэгчдэд харагдах байдал:
+\end{itemize}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth-4cm]{images/question2.png}
+  \caption{<Байгууллага>-д нээлттэй ажлын байрууд?}\label{fig:quest2}
+\end{figure}
+\newpage
+\subsection{Бүх төрлийн цагийн хуваарьтай ажлын байрны дэлгэрэнгүй мэдээлэл}
+Ажиллахыг хүссэн ажлын байрны дагуу ажиллах цагийн хувиариар шүүж харах боломжтой байна. Бүх боломжит ажлын байруудын дэлгэрэнгүй мэдээллийг харуулна.
+\begin{itemize}
+  \item Бүтэн цагийн тогооч ажлын байр асуултын хариулт хэрэглэгчдэд харагдах байдал:
+\end{itemize}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth-3.5cm]{images/question3.png}
+  \caption{<Ажиллах цаг> цагийн <ажил> ажлын байр?}\label{fig:quest3}
+\end{figure}
+\newpage
+\subsection{Цалингийн нөхцөлтэй ажлын байрны дэлгэрэнгүй мэдээлэл}
+Ажиллахыг хүссэн ажлын байрны дагуу цалингийн хэмжээгээр шүүж харах боломжтой байна. Бүх боломжит ажлын байрыг жагсаалт хэлбэрээр харуулна.
+\begin{itemize}
+  \item Бүтэн цагийн тогооч ажлын байр асуултын хариулт хэрэглэгчдэд харагдах байдал:
+\end{itemize}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth-4cm]{images/question4.png}
+  \caption{<Цалин> цалинтай <ажил> ажлын байр?}\label{fig:quest4}
 \end{figure}

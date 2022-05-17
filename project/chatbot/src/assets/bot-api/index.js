@@ -14,8 +14,10 @@ class ApiHelper {
       return undefined
     }
     var query = this.getQuery()
-    const host = 'http://localhost:4000/api/v1'
-    const url = host + query
+    const host = 'http://3.228.127.116'
+    const port = ':4000'
+    const path = '/api/v1'
+    const url = host + port + path + query
     try {
       var res = await fetch(url)
     } catch (error) {
