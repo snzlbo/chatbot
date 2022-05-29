@@ -55,11 +55,6 @@ Domino's pizza хоолны газар нь захиалгын алхмаас э
 \@title-ыг хөгжүүлэхдээ өгөгдөл цуглуулгыг \textit{python} хэлний сан болох \textit{BeautifulSoup} HTML өгөгдөл задлах технологийг ашигласан бөгөөд чатбот системийн үндсэн хөгжүүлэлтийг \textit{Microsoft Bot Framework}-ийн тусламжтайгаар \textit{javascript} хэл дээр хөгжүүлэлтийг хийж гүйцэтгэсэн. Чатбот болон өгөгдлийн сантай холбогдох буюу back-end хөгжүүлэлтийг \textit{node.js}-ийн framework болон \textit{express.js} ашигласан. Харин цуглуулсан өгөгдлийг AWS-EC2 сүлжээнд байршуулсан бөгөөд дүн шинжилгээ хийхдээ \textit{CSV} файлд хадгалан ашигласан бөгөөд судалгааг дараах байдлаар хийсэн болно. 
 \subsection{BeautifulSoup}
 Өгөгдөл цуглуулгын олон технологиудын нэг нь \textit{BeautifulSoup} бөгөөд \textit{python} програмчлалын хэлний сан юм. Энэ нь өгсөн вебсайтын хаяг (Url)-ийн дагуу бүх HTML өгөгдлийг агуулгын хамтаар нь хэрэглэгчид өгдөг. HTML хэл нь мод хэлбэртэй байдаг бөгөөд түүний хүүхэд элементүүдийн агуулгыг шаардлага болон түлхүүр үгийн дагуу цуглуулах зарчмаар ажилладаг. 
-\begin{figure}[ht]
-	\centering
-  \includegraphics[height=4.5cm]{images/bs4.png}
-	\caption{BeautifulSoup лого}\label{fig:bsLogo}
-\end{figure}
 \\Бакалаврын судалгааны ажлын сэдвийн дагуу ажлын байр олгогчдын мэдээлэл болон ажлын байрны мэдээллийг \textbf{zangia.mn}-ээс \textit{BeautifulSoup} ашиглан цуглуулсан. Доорх кодын жишээнд бүх ажлын байрны ангилал болон шүүлтүүрийн агуулгыг цуглуулсан бөгөөд жишээнд зориулж зөвхөн эхний ангиллын мэдээллийг харуулав.
 \lstinputlisting[language=Python, caption=BeautifulSoup жишээ өгөгдөл цугуулалт]{code/bs.py}
 \begin{figure}[ht]
@@ -92,11 +87,6 @@ PostgreSQL нь үнэ төлбөргүй, нээлттэй эхийн \textit{r
 \lstinputlisting[language=Python, firstline=8, lastline=19, caption=PostgreSQL-тэй харьцах объектын класс]{code/insert.py} 
 \subsection{Express.js}
 Express.js нь Node.js-ийн framework бөгөөд үнэ төлбөргүй MIT лицензийн нээлттэй эхийн програм хангамж юм. Энэ нь сервер болон веб програмуудыг бүтээхэд зориулагдсан бүх хэрэгслүүдийг хангасан хамгийн энгийн фреймворк юм. Бидний мэдэх request/response-ийг зохицуулах, чиглүүлэх үндсэн үүргийг гүйцэтгэдэг.
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=5cm]{images/expressJs.png}
-  \caption{Express.js лого} \label{fig:expressjs}
-\end{figure}
 \subsection{Comma Separated Values - CSV файл}
 CSV нь өгөгдлийн утгуудыг тусгаарлахад таслал ашигладаг текст файл юм. Файлын мөр бүр нь өгөгдөл байдаг бөгөөд харгалзах утгуудад текст файлыг бичих энгийн өгөгдөл хадгалах технологи юм. Их өгөгдөлтэй хялбар харьцах боломжийг олгодгоороо давуу талтай.
 \subsection{Microsoft Bot Framework}
